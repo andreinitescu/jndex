@@ -38,16 +38,20 @@ body {
     padding: 0px 15px;
 }
 
+.thumbnail {
+    overflow: hidden;
+}
+
 .title {
-    min-width: 130px;
-    width: 60%;
+    white-space: nowrap;
     display: inline-block;
     float: left;
+    margin-right: 10px;
 }
 
 .date {
+    min-width: 75px;
     font-size: 9px;
-    width: 75px;
     display: inline-block;
     white-space: nowrap;
     //text-align: right;
@@ -57,9 +61,33 @@ body {
 </style>
 <script type="text/javascript" src="vendor/jquery-1.10.2.js"></script>
 <script type="text/javascript">
-$(window).resize(function() {
-        // handle floating left->right->left based on parent width
+var JNDEX = {};
+JNDEX.min_width = 0;
+JNDEX.float = null;
+JNDEX.refloat = function() {
+    // handle floating left->right->left based on parent width
+    var float = ($('.thumbnail').first().width() <= JNDEX.min_width ? 'left' : 'right');
+    var clear = (float == 'left' ? 'both' : 'none');
+
+    if (JNDEX.float != float) {
+        $('#thumbnails').find('.date').css('float', float);
+        $('#thumbnails').find('.date').css('clear', clear);
+        JNDEX.float = float;
+    }
+};
+
+$(window).resize(JNDEX.refloat);
+$(document).ready(function() {
+    $('.thumbnail').each(function() {
+        var min_width = ($(this).find('.title').outerWidth(true)||0) + 
+                        ($(this).find('.date').outerWidth(true)||0);
+        if (min_width > JNDEX.min_width) {
+            JNDEX.min_width = min_width;
+        }
+    });
+    JNDEX.refloat();
 });
+
 </script>
     
 </head>
@@ -74,49 +102,36 @@ $(window).resize(function() {
     <div class="row-fluid">
         <ul class="thumbnails">
     <li class="span3">
-        <div class="thumbnail">
+        <div class="thumbnail" id="t1">
             <img src="http://adurosolutions.com/jndex/3q2wfv.jpg" alt="">
-            <span class="title"><a href="http://adurosolutions.com/jndex/3q2wfv.jpg">title</a></span>
+            <span class="title"><a href="http://adurosolutions.com/jndex/3q2wfv.jpg">business-cat.jpg</a></span>
             <span class="date">04/11/2011 02:29</span>
             <div style="clear: both;"></div>
         </div>
     </li>
     <li class="span3">
-        <div class="thumbnail">
+        <div class="thumbnail"i id="t2">
             <img src="http://adurosolutions.com/jndex/dir1/sub2/31o6.jpg" alt="">
-            <a href="#">title</a>
+            <span class="title"><a href="http://adurosolutions.com/jndex/dir1/sub2/31o6.jpg">MostInterestingCatInTheWorld.jpg</a></span>
+            <span class="date">04/11/2011 02:29</span>
         </div>
     </li>
     <li class="span3">
-        <div class="thumbnail">
+        <div class="thumbnail"i id="t3">
             <img src="http://cl.ly/QMKw/leopard-folder.png">
-            <a href="#">title</a>
+            <span class="title"><a href="http://adurosolutions.com/jndex/dir1/">dir1</a></span>
+            <span class="date">04/11/2011 02:29</span>
         </div>
     </li>
     <li class="span3">
-        <div class="thumbnail">
+        <div class="thumbnail" id="t4">
             <img src="http://adurosolutions.com/jndex/dir2/sub1/3p8000.jpg" alt="">
-            <a href="#">title</a>
+            <span class="title"><a href="http://adurosolutions.com/jndex/dir2/sub1/3p8000.jpg">Dwight K. Schrute</a></span>
+            <span class="date">04/11/2011 02:29</span>
         </div>
     </li>
 </ul>
 </div>
 </div>
-
-<!-- Modal -->
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Modal header</h3>
-  </div>
-  <div class="modal-body">
-    <p>One fine body…</p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary">Save changes</button>
-  </div>
-</div>
-
 </body>
 </html>
