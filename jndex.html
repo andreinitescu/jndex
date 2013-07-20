@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="vendor/bootstrap/js/bootstrap.js"></script>
 <style type="text/css" media="screen">
 
 body {
@@ -13,55 +14,109 @@ body {
     color: #FFF;
     min-height: 50px;
     line-height: 50px;
-    padding-left: 15px;
     font-size: 17px;
+    width: 100%;
 }
 
 #header a,
 #header a:hover {
+    padding-left: 15px;
     color: #FFF;
     text-decoration: none;
 }
 
-.breadcrumb {
+/*.breadcrumb {
     background-color: #FFF;
     margin-bottom: 0px;
-}
-
-#navigation {
-    padding: 0px 20px;
-}
-
-#content {
-    padding: 0px 20px; 
-}
+}*/
 
 .placeholder {
     color: #CCC;
 }
 
+#thumbnails {
+    padding: 0px 15px;
+}
+
+.title {
+    min-width: 130px;
+    width: 60%;
+    display: inline-block;
+    float: left;
+}
+
+.date {
+    font-size: 9px;
+    width: 75px;
+    display: inline-block;
+    white-space: nowrap;
+    //text-align: right;
+    float: right;
+}
+
 </style>
+<script type="text/javascript" src="vendor/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+$(window).resize(function() {
+        // handle floating left->right->left based on parent width
+});
+</script>
+    
 </head>
 <body>
-<div class="row-fluid">
-    <div id="header" class="span12"><a href="https://github.com/dzaman/jndex">jndex</a></div>
-</div>
+<div id="header"><a href="https://github.com/dzaman/jndex">jndex</a></div>
 <ul class="breadcrumb">
     <li><a href="#">Home</a> <span class="divider">/</span></li>
     <li><a href="#">Library</a> <span class="divider">/</span></li>
     <li class="active">Data</li>
 </ul>
-<div class="row-fluid">
-    <div id="navigation" class="span2">
-        <ul>
-            <li><a href="#">foo</a></li>
-            <li><a href="#">bar</a></li>
-            <li><a href="#">baz</a></li>
-        </ul>
-    </div>
-    <div id="content" class="span10">
-            <center class="placeholder">view content here</center>
-    </div>
+<div id="thumbnails">
+    <div class="row-fluid">
+        <ul class="thumbnails">
+    <li class="span3">
+        <div class="thumbnail">
+            <img src="http://adurosolutions.com/jndex/3q2wfv.jpg" alt="">
+            <span class="title"><a href="http://adurosolutions.com/jndex/3q2wfv.jpg">title</a></span>
+            <span class="date">04/11/2011 02:29</span>
+            <div style="clear: both;"></div>
+        </div>
+    </li>
+    <li class="span3">
+        <div class="thumbnail">
+            <img src="http://adurosolutions.com/jndex/dir1/sub2/31o6.jpg" alt="">
+            <a href="#">title</a>
+        </div>
+    </li>
+    <li class="span3">
+        <div class="thumbnail">
+            <img src="http://cl.ly/QMKw/leopard-folder.png">
+            <a href="#">title</a>
+        </div>
+    </li>
+    <li class="span3">
+        <div class="thumbnail">
+            <img src="http://adurosolutions.com/jndex/dir2/sub1/3p8000.jpg" alt="">
+            <a href="#">title</a>
+        </div>
+    </li>
+</ul>
 </div>
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Modal header</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary">Save changes</button>
+  </div>
+</div>
+
 </body>
 </html>
