@@ -51,3 +51,23 @@ body {
 .row-fluid ul.thumbnails li.span3:nth-child(4n + 5) { margin-left : 0px; }
 .row-fluid ul.thumbnails li.span2:nth-child(6n + 7) { margin-left : 0px; }
 .row-fluid ul.thumbnails li.span1:nth-child(12n + 13) { margin-left : 0px; }
+
+#overlay {
+    z-index: 999998;
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0.6;
+    background-color: #000;
+    height: 100%;
+    width: 100%;
+}
+
+.lightbox {
+    z-index: 999999;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #FFF;
+    padding: 5px;
+}

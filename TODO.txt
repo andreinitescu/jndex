@@ -3,3 +3,4 @@
 - support loading new directories
 - use actual images / image placeholders for non-images
 - lightbox for opened images
+- load dependencies with require.js

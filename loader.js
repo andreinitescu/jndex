@@ -1,21 +1,28 @@
 JNDEX = {};
-JNDEX.loadCss = function(src) {
+JNDEX.bustCache = function(string, doit) {
+    if (doit) {
+        string += '?' + (new Date()).getTime();
+    }
+    return string;
+}
+
+JNDEX.loadCss = function(src, bustcache) {
     var css = document.createElement('link');
-    css.href = src;
+    css.href = JNDEX.bustCache(src, bustcache);
     css.rel = 'stylesheet';
     css.media = 'screen';
     document.head.appendChild(css);
 };
-JNDEX.loadScript = function (src) {
+JNDEX.loadScript = function (src, bustcache) {
     var script = document.createElement('script');
-    script.src = src;
+    script.src = JNDEX.bustCache(src, bustcache);
     script.type = 'text/javascript';
     document.head.appendChild(script);
 };
 
 // load css
-JNDEX.loadCss('http://localhost/~matthew/jndex/jndex.css');
 JNDEX.loadCss('http://localhost/~matthew/jndex/vendor/bootstrap.css');
+JNDEX.loadCss('http://localhost/~matthew/jndex/jndex.css', true);
 
 // write document body
 // -- this isn't allowed for some reason. chrome says it's unsafe.
@@ -53,15 +60,29 @@ d.innerHTML =
 '    </div>';
 document.body.appendChild(d);
 
-var s = document.createElement('script');
-s.id = 'file-template';
-s.type = 'text/template';
-s.innerHTML = 
+var o = document.createElement('div');
+o.id = 'overlay';
+o.className = 'hide';
+document.body.appendChild(o);
+
+var l = document.createElement('script');
+l.id = 'lightbox-template';
+l.type = 'text/template';
+l.innerHTML = 
+'<div class="lightbox invisible">' + 
+'   <img src="<%= src %>">' + 
+'</div>';
+document.body.appendChild(l);
+
+var f = document.createElement('script');
+f.id = 'file-template';
+f.type = 'text/template';
+f.innerHTML = 
 '<img src="http://adurosolutions.com/jndex/3q2wfv.jpg">' + 
 '<span class="title"><a href="<%- url %>"><%- filename %></a></span>' + 
 '<span class="date"><%- date %></span>';
 
-document.body.appendChild(s);
+document.body.appendChild(f);
 
 // load scripts 
 // if backbone is loaded before underscore, we'll have problems
@@ -70,5 +91,5 @@ document.body.appendChild(s);
 JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/jquery.js');
 JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/underscore.js');
 JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/backbone.js');
-JNDEX.loadScript('http://localhost/~matthew/jndex/jndex.js?'+(new Date()).getTime());
+JNDEX.loadScript('http://localhost/~matthew/jndex/jndex.js', true);
 

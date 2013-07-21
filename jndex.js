@@ -88,6 +88,7 @@ JNDEX.init = function() {
         events: {
             'click #breadcrumb a': 'navigate',
             'openfile': 'openFile', 
+            'click #overlay': 'closeFile'
         },
         initialize: function() {
             console.log('JndexView.initialize');
@@ -104,8 +105,6 @@ JNDEX.init = function() {
             // handle floating left->right->left based on parent width
             var float = ($('.thumbnail').first().width() <= this.min_width ? 'left' : 'right');
             var clear = (float == 'left' ? 'both' : 'none');
-
-            console.log('min_width', this.min_width, $('.thumbnail').first().width());
 
             if (this.float != float) {
                 $('#thumbnails').find('.date').css('float', float);
@@ -139,6 +138,34 @@ JNDEX.init = function() {
         },
         openFile: function(e, file) {
             console.log('JndexView.openFile');
+            $('#overlay').removeClass('hide').html();
+            var src = 'http://adurosolutions.com/jndex/358tlz.jpg';
+            var img = new Image();
+            img.src = src;
+            var w = img.width;
+            var h = img.height;
+
+            console.log('a');
+            var t = _.template($('#lightbox-template').html())({src: src});
+            $('body').append(t);
+
+            console.log($(t));
+            console.log($('.lightbox').first());
+            console.log('width', $('.lightbox').outerWidth(), $('.lightbox').width());
+
+            var max_width = $('.lightbox').outerWidth();
+            var max_height = $('.lightbox').outerHeight();
+
+            $('.lightbox').css('left', ($(window).width()-max_width)/2);
+            $('.lightbox').css('top', ($(window).height()-max_height)/2);
+
+            // image + border is greater than window size
+            // image is greater than window size
+            // image is smaller than window size
+            $('.lightbox').removeClass('invisible').html();
+        },
+        closeFile: function() {
+            console.log('close file');
         },
         navigate: function() {
             console.log('navigation');
