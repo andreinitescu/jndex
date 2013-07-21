@@ -62,10 +62,34 @@ s.innerHTML =
 
 document.body.appendChild(s);
 
-// load scripts
+// load scripts -- these need to be loaded sequentially to avoid errors
+// if backbone is loaded before underscore, we'll have problems
+//      Uncaught TypeError: Cannot call method 'each' of undefined 
 JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/jquery.js');
 JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/underscore.js');
 JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/backbone.js');
-JNDEX.loadScript('http://localhost/~matthew/jndex/jndex.js?'+(new Date()).getTime());
 
-console.log('loaded');
+function dependencies_loaded() {
+    try {
+        if (jQuery != null && _ != null && Backbone != null) {
+            console.log('all defined');
+            return true;
+        }
+    }
+    catch(e) {
+    }
+    return false;
+}
+function load_jndex() {
+    console.log('trying to load jndex');
+    if (!dependencies_loaded()) {
+        console.log('failed, will try again');
+        setTimeout(load_jndex, 100);
+        return;
+    }
+    JNDEX.loadScript('http://localhost/~matthew/jndex/jndex.js?'+(new Date()).getTime());
+    console.log('loaded');
+}
+
+load_jndex();
+
