@@ -1,0 +1,53 @@
+body {
+    font-size: 13px;
+}
+
+#header {
+    background-color: #000;
+    color: #FFF;
+    min-height: 50px;
+    line-height: 50px;
+    font-size: 17px;
+    width: 100%;
+}
+
+#header a,
+#header a:hover {
+    padding-left: 15px;
+    color: #FFF;
+    text-decoration: none;
+}
+
+#content {
+    padding: 0px 15px;
+}
+
+.thumbnail {
+    overflow: hidden;
+}
+
+.title {
+    white-space: nowrap;
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+}
+
+.date {
+    min-width: 75px;
+    font-size: 9px;
+    display: inline-block;
+    white-space: nowrap;
+    float: right;
+}
+
+/* 
+    fix for n-th child issues 
+    https://github.com/twitter/bootstrap/issues/3494
+*/
+.row-fluid ul.thumbnails li.span12 + li { margin-left : 0px; }
+.row-fluid ul.thumbnails li.span6:nth-child(2n + 3) { margin-left : 0px; }
+.row-fluid ul.thumbnails li.span4:nth-child(3n + 4) { margin-left : 0px; }
+.row-fluid ul.thumbnails li.span3:nth-child(4n + 5) { margin-left : 0px; }
+.row-fluid ul.thumbnails li.span2:nth-child(6n + 7) { margin-left : 0px; }
+.row-fluid ul.thumbnails li.span1:nth-child(12n + 13) { margin-left : 0px; }

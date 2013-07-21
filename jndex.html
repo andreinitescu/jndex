@@ -2,125 +2,58 @@
 <html lang="en">
 <head>
 <link href="vendor/bootstrap.css" rel="stylesheet" media="screen">
+<link href="jndex.css" rel="stylesheet" media="screen">
+
 <script type="text/javascript" src="vendor/jquery.js"></script>
+<script type="text/javascript" src="vendor/underscore.js"></script>
 <script type="text/javascript" src="vendor/backbone.js"></script>
-<style type="text/css" media="screen">
-
-body {
-    font-size: 13px;
-}
-
-#header {
-    background-color: #000;
-    color: #FFF;
-    min-height: 50px;
-    line-height: 50px;
-    font-size: 17px;
-    width: 100%;
-}
-
-#header a,
-#header a:hover {
-    padding-left: 15px;
-    color: #FFF;
-    text-decoration: none;
-}
-
-#thumbnails {
-    padding: 0px 15px;
-}
-
-.thumbnail {
-    overflow: hidden;
-}
-
-.title {
-    white-space: nowrap;
-    display: inline-block;
-    float: left;
-    margin-right: 10px;
-}
-
-.date {
-    min-width: 75px;
-    font-size: 9px;
-    display: inline-block;
-    white-space: nowrap;
-    float: right;
-}
-
-</style>
-<script type="text/javascript">
-var JNDEX = {};
-JNDEX.min_width = 0;
-JNDEX.float = null;
-JNDEX.refloat = function() {
-    // handle floating left->right->left based on parent width
-    var float = ($('.thumbnail').first().width() <= JNDEX.min_width ? 'left' : 'right');
-    var clear = (float == 'left' ? 'both' : 'none');
-
-    if (JNDEX.float != float) {
-        $('#thumbnails').find('.date').css('float', float);
-        $('#thumbnails').find('.date').css('clear', clear);
-        JNDEX.float = float;
-    }
-};
-
-$(window).resize(JNDEX.refloat);
-$(document).ready(function() {
-    $('.thumbnail').each(function() {
-        var min_width = ($(this).find('.title').outerWidth(true)||0) + 
-                        ($(this).find('.date').outerWidth(true)||0);
-        if (min_width > JNDEX.min_width) {
-            JNDEX.min_width = min_width;
-        }
-    });
-    JNDEX.refloat();
-});
-
-</script>
-
-<script type="text/template" id="item-template">
-    <li class="span3 thumbnail">
-        <img src="<%- url %>" alt="<%- filename ->">
-        <span class="title"><a href="<%- url %>"><%- filename -></a></span>
-        <span class="date"><%- date -></span>
-    </li>
-</script>
+<script type="text/javascript" src="jndex.js"></script>
 
 </head>
 <body>
-<div id="header"><a href="https://github.com/dzaman/jndex">jndex</a></div>
-<ul class="breadcrumb">
-    <li><a href="#">Home</a> <span class="divider">/</span></li>
-    <li><a href="#">Library</a> <span class="divider">/</span></li>
-    <li class="active">Data</li>
-</ul>
-<div id="thumbnails">
-    <div class="row-fluid">
-        <ul class="thumbnails">
-            <li class="span3 thumbnail">
-                <img src="http://adurosolutions.com/jndex/3q2wfv.jpg" alt="">
-                <span class="title"><a href="http://adurosolutions.com/jndex/3q2wfv.jpg">business-cat.jpg</a></span>
-                <span class="date">04/11/2011 02:29</span>
-            </li>
-            <li class="span3 thumbnail">
-                <img src="http://adurosolutions.com/jndex/dir1/sub2/31o6.jpg" alt="">
-                <span class="title"><a href="http://adurosolutions.com/jndex/dir1/sub2/31o6.jpg">MostInterestingCatInTheWorld.jpg</a></span>
-                <span class="date">04/11/2011 02:29</span>
-            </li>
-            <li class="span3 thumbnail">
-                <img src="http://cl.ly/QMKw/leopard-folder.png">
-                <span class="title"><a href="http://adurosolutions.com/jndex/dir1/">dir1</a></span>
-                <span class="date">04/11/2011 02:29</span>
-            </li>
-            <li class="span3 thumbnail">
-                <img src="http://adurosolutions.com/jndex/dir2/sub1/3p8000.jpg" alt="">
-                <span class="title"><a href="http://adurosolutions.com/jndex/dir2/sub1/3p8000.jpg">Dwight K. Schrute</a></span>
-                <span class="date">04/11/2011 02:29</span>
-            </li>
-        </ul>
+<div id="jndex">
+    <div id="header"><a href="https://github.com/dzaman/jndex">jndex</a></div>
+    <ul id="breadcrumb" class="breadcrumb">
+        <li><a href="#">Home</a> <span class="divider">/</span></li>
+        <li><a href="#">Library</a> <span class="divider">/</span></li>
+        <li class="active">Data</li>
+    </ul>
+    <div id="content">
+        <div class="row-fluid">
+            <ul id="thumbnails" class="thumbnails"> 
+                <!--
+                <li class="span3 thumbnail">
+                    <img src="http://adurosolutions.com/jndex/3q2wfv.jpg" alt="">
+                    <span class="title"><a href="http://adurosolutions.com/jndex/3q2wfv.jpg">business-cat.jpg</a></span>
+                    <span class="date">04/11/2011 02:29</span>
+                </li>
+                <li class="span3 thumbnail">
+                    <img src="http://adurosolutions.com/jndex/dir1/sub2/31o6.jpg" alt="">
+                    <span class="title"><a href="http://adurosolutions.com/jndex/dir1/sub2/31o6.jpg">MostInterestingCatInTheWorld.jpg</a></span>
+                    <span class="date">04/11/2011 02:29</span>
+                </li>
+                <li class="span3 thumbnail">
+                    <img src="http://cl.ly/QMKw/leopard-folder.png">
+                    <span class="title"><a href="http://adurosolutions.com/jndex/dir1/">dir1</a></span>
+                    <span class="date">04/11/2011 02:29</span>
+                </li>
+                <li class="span3 thumbnail">
+                    <img src="http://adurosolutions.com/jndex/dir2/sub1/3p8000.jpg" alt="">
+                    <span class="title"><a href="http://adurosolutions.com/jndex/dir2/sub1/3p8000.jpg">Dwight K. Schrute</a></span>
+                    <span class="date">04/11/2011 02:29</span>
+                </li>
+                -->
+            </ul>
+        </div>
     </div>
 </div>
+
+<!-- templates -->
+<script type="text/template" id="file-template">
+    <img src="http://adurosolutions.com/jndex/3q2wfv.jpg">
+    <span class="title"><a href="<%- url %>"><%- filename %></a></span>
+    <span class="date"><%- date %></span>
+</script>
+
 </body>
 </html>
