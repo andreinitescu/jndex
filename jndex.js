@@ -17,8 +17,9 @@ $(function() {
 
             console.log('Dictionary.fetch');
 
+            console.log(window.location);
             var request = $.ajax({
-                url: 'http://localhost/~matthew/jndex/vendor/'
+                url: window.location
             });
 
             request.done(function(data) {
@@ -94,6 +95,8 @@ $(function() {
             // there must be a better way to do this
             var jndex = this;
             $(window).resize(function() { jndex.render() });
+            // Note that fetch should not be used to populate collections on page load — all models needed at 
+            // load time should already be bootstrapped in to place. -- backbone docs
             cwd.fetch();
         },
         render: function() {
