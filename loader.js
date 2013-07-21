@@ -19,6 +19,7 @@ JNDEX.loadCss('http://localhost/~matthew/jndex/vendor/bootstrap.css');
 
 // write document body
 // -- this isn't allowed for some reason. chrome says it's unsafe.
+// -- might have been caused by HTTP->HTTPS issue
 //document.body.innerHTML = 
 //'<div id="jndex">' + 
 //'    <div id="header"><a href="https://github.com/dzaman/jndex">jndex</a></div>' + 
@@ -62,9 +63,10 @@ s.innerHTML =
 
 document.body.appendChild(s);
 
-// load scripts -- these need to be loaded sequentially to avoid errors
+// load scripts 
 // if backbone is loaded before underscore, we'll have problems
 //      Uncaught TypeError: Cannot call method 'each' of undefined 
+// using Require.js seems like it might solve this problem
 JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/jquery.js');
 JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/underscore.js');
 JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/backbone.js');

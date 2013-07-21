@@ -1,0 +1,5 @@
+- empty content message
+- set navigation path
+- support loading new directories
+- use actual images / image placeholders for non-images
+- lightbox for opened images
