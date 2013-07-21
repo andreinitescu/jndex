@@ -1,30 +1,3 @@
-//var JNDEX = {};
-//JNDEX.min_width = 0;
-//JNDEX.float = null;
-//JNDEX.refloat = function() {
-//    // handle floating left->right->left based on parent width
-//    var float = ($('.thumbnail').first().width() <= JNDEX.min_width ? 'left' : 'right');
-//    var clear = (float == 'left' ? 'both' : 'none');
-//
-//    if (JNDEX.float != float) {
-//        $('#thumbnails').find('.date').css('float', float);
-//        $('#thumbnails').find('.date').css('clear', clear);
-//        JNDEX.float = float;
-//    }
-//};
-//
-//$(window).resize(JNDEX.refloat);
-//$(document).ready(function() {
-//    $('.thumbnail').each(function() {
-//        var min_width = ($(this).find('.title').outerWidth(true)||0) + 
-//                        ($(this).find('.date').outerWidth(true)||0);
-//        if (min_width > JNDEX.min_width) {
-//            JNDEX.min_width = min_width;
-//        }
-//    });
-//    JNDEX.refloat();
-//});
-
 $(function() {
     var File = Backbone.Model.extend({
         defaults: function() {
@@ -107,8 +80,10 @@ $(function() {
     });
 
     var JndexView  = Backbone.View.extend({
+        float: null,
+        clear: null,
+        min_width: 0,
         el: $('#jndex'),
-        max_width: 0,
         events: {
             'click #breadcrumb a': 'navigate',
             'openfile': 'openFile', 
@@ -116,26 +91,51 @@ $(function() {
         initialize: function() {
             console.log('JndexView.initialize');
             this.listenTo(cwd, 'reset', this.setDirectory);
+            // there must be a better way to do this
+            var jndex = this;
+            $(window).resize(function() { jndex.render() });
             cwd.fetch();
+        },
+        render: function() {
+            console.log('rendering...');
+            // handle floating left->right->left based on parent width
+            var float = ($('.thumbnail').first().width() <= this.min_width ? 'left' : 'right');
+            var clear = (float == 'left' ? 'both' : 'none');
+
+            console.log('min_width', this.min_width, $('.thumbnail').first().width());
+
+            if (this.float != float) {
+                $('#thumbnails').find('.date').css('float', float);
+                $('#thumbnails').find('.date').css('clear', clear);
+                this.float = float;
+            }
         },
         setDirectory: function() {
             console.log('JndexView.setDirectory');
+            this.min_width = 0;
             cwd.each(function(file) {
                 var view = new FileView({model: file});
                 var el = view.render().el;
                 // -- works, but 'this' doesn't keep track of the events
                 //$(el).on('click', function() { console.log('click2', this); });
                 // -- 'this' keeps track of the events, but it doesn't work
+                // -- probably why this.listenTo($(window), 'resize', ...) didn't work either
                 //this.listenTo($(el), 'click', function() { console.log('click', this); });
                 this.$("#thumbnails").append(el);
+                var min_width = ($(el).find('.title').outerWidth(true)||0) +
+                                ($(el).find('.date').outerWidth(true)||0);
+
+                console.log(this);
+
+                if (min_width > this.min_width) {
+                    this.min_width = min_width;
+                }
             }, this);
+            console.log(this);
             this.render();
         },
         openFile: function(e, file) {
             console.log('JndexView.openFile');
-        },
-        render: function() {
-            console.log('JndexView.render');
         },
         navigate: function() {
             console.log('navigation');
