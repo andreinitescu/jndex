@@ -1,4 +1,4 @@
-$(function() {
+JNDEX.init = function() {
     var File = Backbone.Model.extend({
         defaults: function() {
             return {
@@ -146,5 +146,29 @@ $(function() {
     });
 
     var Jndex = new JndexView;
+};
 
-});
+JNDEX.dependencies_loaded = function() {
+    try {
+        if (jQuery != null && _ != null && Backbone != null) {
+            console.log('all defined');
+            return true;
+        }
+    }
+    catch(e) {
+    }
+    return false;
+}
+
+JNDEX.init_wrapper = function() {
+    console.log('trying to load jndex');
+    if (!JNDEX.dependencies_loaded()) {
+        console.log('failed, will try again');
+        setTimeout(JNDEX.init_wrapper, 100);
+        return;
+    }
+    console.log('loaded');
+    JNDEX.init();
+}
+
+JNDEX.init_wrapper();
