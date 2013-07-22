@@ -4,7 +4,7 @@ JNDEX.init = function() {
             return {
                 filename: '--',
                 url: '#',
-                date: '1/1/1970 00:00:00'
+                date: new Date(0)
             };
         }
     });
@@ -39,9 +39,11 @@ JNDEX.init = function() {
                     var text = $(this).html();
                     var d = Date.parse(text);
                     if (d) {
-                      date = d;
+                      date = new Date(d);
                     }
                   });
+
+                  console.log('date', date);
 
                   if (filename && date) {
                     json.push({filename: filename, date: date});
@@ -119,7 +121,6 @@ JNDEX.init = function() {
                 this.float = float;
             }
             
-            /*
             if (this.currentFile) {
                 // do this in open
                 var padding_width = $('#lightbox').outerWidth()-$('#lightbox').width();
@@ -144,13 +145,12 @@ JNDEX.init = function() {
                     }
                 }
 
-                $('#lightbox').find('img').height(height-padding); 
-                $('#lightbox').find('img').width(width-padding);
+                $('#lightbox').find('img').height(height-padding_height); 
+                $('#lightbox').find('img').width(width-padding_width);
 
                 $('#lightbox').css('left', ($(window).width()-width)/2);
                 $('#lightbox').css('top', ($(window).height()-height)/2);
             }
-            */
         },
         setDirectory: function() {
             console.log('JndexView.setDirectory');
@@ -178,7 +178,6 @@ JNDEX.init = function() {
         },
         openFile: function(e, file) {
             console.log('JndexView.openFile');
-            /*
             $('#overlay').removeClass('hide');
             var src = 'http://adurosolutions.com/jndex/358tlz.jpg';
             var img = new Image();
@@ -193,7 +192,6 @@ JNDEX.init = function() {
             $('#lightbox').append(img);
             this.render();
             $('#lightbox').removeClass('invisible');
-            */
         },
         closeFile: function() {
             console.log('JndexView.closeFile');
