@@ -69,7 +69,11 @@ JNDEX.init = function() {
             this.listenTo(this.model, 'destroy', this.remove);
         },
         events: {
-            'click': function() { $(this.el).trigger('openfile', this.model); }
+            'click img': 'open',
+            'click a': 'open'
+        },
+        open: function() {
+            $(this.el).trigger('openfile', this.model); 
         },
         render: function() {
             $(this.el).addClass('span3 thumbnail').html(this.template(this.model.toJSON()));
@@ -83,12 +87,14 @@ JNDEX.init = function() {
     var JndexView  = Backbone.View.extend({
         float: null,
         clear: null,
+        currentFile: null,
         min_width: 0,
         el: $('#jndex'),
         events: {
             'click #breadcrumb a': 'navigate',
             'openfile': 'openFile', 
-            'click #overlay': 'closeFile'
+            'click #overlay': 'closeFile',
+            'click #lightbox': 'closeFile'
         },
         initialize: function() {
             console.log('JndexView.initialize');
@@ -102,6 +108,7 @@ JNDEX.init = function() {
         },
         render: function() {
             console.log('rendering...');
+
             // handle floating left->right->left based on parent width
             var float = ($('.thumbnail').first().width() <= this.min_width ? 'left' : 'right');
             var clear = (float == 'left' ? 'both' : 'none');
@@ -111,6 +118,39 @@ JNDEX.init = function() {
                 $('#thumbnails').find('.date').css('clear', clear);
                 this.float = float;
             }
+            
+            /*
+            if (this.currentFile) {
+                // do this in open
+                var padding_width = $('#lightbox').outerWidth()-$('#lightbox').width();
+                var padding_height = $('#lightbox').outerHeight()-$('#lightbox').height();
+                var max_width = this.currentFile.h + padding_width/2;
+                var max_height = this.currentFile.w + padding_height/2;
+                // -- end do this in open
+                var width = Math.min($(window).width(), max_height);
+                var height = Math.min($(window).height(), max_width);
+
+                if (width < max_width || height < max_height) {
+                    var r_width = width/max_width;
+                    var r_height = height/max_height;
+
+                    // scale by height b.c. height is a smaller percentage of the respective max
+                    if (r_width > r_height) {
+                        width = max_width * r_height;
+                    } 
+                    // scale by width b.c. width is a smaller percentage of the respecive max
+                    else {
+                        height = max_height * r_width;
+                    }
+                }
+
+                $('#lightbox').find('img').height(height-padding); 
+                $('#lightbox').find('img').width(width-padding);
+
+                $('#lightbox').css('left', ($(window).width()-width)/2);
+                $('#lightbox').css('top', ($(window).height()-height)/2);
+            }
+            */
         },
         setDirectory: function() {
             console.log('JndexView.setDirectory');
@@ -138,34 +178,29 @@ JNDEX.init = function() {
         },
         openFile: function(e, file) {
             console.log('JndexView.openFile');
-            $('#overlay').removeClass('hide').html();
+            /*
+            $('#overlay').removeClass('hide');
             var src = 'http://adurosolutions.com/jndex/358tlz.jpg';
             var img = new Image();
             img.src = src;
-            var w = img.width;
-            var h = img.height;
 
-            console.log('a');
-            var t = _.template($('#lightbox-template').html())({src: src});
-            $('body').append(t);
+            this.currentFile = {
+                img: img,
+                h: img.height, 
+                w: img.width
+            };
 
-            console.log($(t));
-            console.log($('.lightbox').first());
-            console.log('width', $('.lightbox').outerWidth(), $('.lightbox').width());
-
-            var max_width = $('.lightbox').outerWidth();
-            var max_height = $('.lightbox').outerHeight();
-
-            $('.lightbox').css('left', ($(window).width()-max_width)/2);
-            $('.lightbox').css('top', ($(window).height()-max_height)/2);
-
-            // image + border is greater than window size
-            // image is greater than window size
-            // image is smaller than window size
-            $('.lightbox').removeClass('invisible').html();
+            $('#lightbox').append(img);
+            this.render();
+            $('#lightbox').removeClass('invisible');
+            */
         },
         closeFile: function() {
-            console.log('close file');
+            console.log('JndexView.closeFile');
+            this.currentFile = null;
+            $('#lightbox').addClass('invisible');
+            $('#overlay').addClass('hide');
+            $('#lightbox').find('img').remove();
         },
         navigate: function() {
             console.log('navigation');

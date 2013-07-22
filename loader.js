@@ -48,31 +48,19 @@ d.id = 'jndex';
 d.innerHTML = 
 '    <div id="header"><a href="https://github.com/dzaman/jndex">jndex</a></div>' + 
 '    <ul id="breadcrumb" class="breadcrumb">' + 
-'        <li><a href="#">Home</a> <span class="divider">/</span></li>' + 
-'        <li><a href="#">Library</a> <span class="divider">/</span></li>' + 
-'        <li class="active">Data</li>' + 
+//'        <li><a href="#">Home</a> <span class="divider">/</span></li>' + 
+//'        <li><a href="#">Library</a> <span class="divider">/</span></li>' + 
+'        <li class="active">Directory browsing coming soon...</li>' + 
 '    </ul>' + 
 '    <div id="content">' + 
 '        <div class="row-fluid">' + 
 '            <ul id="thumbnails" class="thumbnails">' + 
 '            </ul>' + 
 '        </div>' + 
+'    <div id="overlay" class="hide"></div>' + 
+'    <div id="lightbox" class="invisible"></div>' +
 '    </div>';
 document.body.appendChild(d);
-
-var o = document.createElement('div');
-o.id = 'overlay';
-o.className = 'hide';
-document.body.appendChild(o);
-
-var l = document.createElement('script');
-l.id = 'lightbox-template';
-l.type = 'text/template';
-l.innerHTML = 
-'<div class="lightbox invisible">' + 
-'   <img src="<%= src %>">' + 
-'</div>';
-document.body.appendChild(l);
 
 var f = document.createElement('script');
 f.id = 'file-template';
@@ -81,8 +69,11 @@ f.innerHTML =
 '<img src="http://adurosolutions.com/jndex/3q2wfv.jpg">' + 
 '<span class="title"><a href="<%- url %>"><%- filename %></a></span>' + 
 '<span class="date"><%- date %></span>';
-
 document.body.appendChild(f);
+
+// without HTML doctype, $(window).height/width will to $(document).height/width instead of the visible area
+var newDoctype = document.implementation.createDocumentType('html');
+document.doctype.parentNode.replaceChild(newDoctype, document.doctype);
 
 // load scripts 
 // if backbone is loaded before underscore, we'll have problems
