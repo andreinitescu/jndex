@@ -80,3 +80,5 @@ script.type = 'text/javascript';
 script.setAttribute('data-main', 'http://localhost/~matthew/jndex/main.js');
 document.head.appendChild(script);
 
+// insert JNDEX config (# of items per row)
+
