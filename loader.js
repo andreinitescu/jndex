@@ -4,7 +4,7 @@ JNDEX.bustCache = function(string, doit) {
         string += '?' + (new Date()).getTime();
     }
     return string;
-}
+};
 
 JNDEX.loadCss = function(src, bustcache) {
     var css = document.createElement('link');

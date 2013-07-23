@@ -133,7 +133,7 @@ var FileView = Backbone.View.extend({
     }
 });
 
-var cwd = new Directory;
+var cwd = new Directory();
 
 var JndexView  = Backbone.View.extend({
     float: null,
@@ -152,7 +152,7 @@ var JndexView  = Backbone.View.extend({
         this.listenTo(cwd, 'reset', this.setDirectory);
         // there must be a better way to do this
         var jndex = this;
-        $(window).resize(function() { jndex.render() });
+        $(window).resize(function() { jndex.render(); });
         // Note that fetch should not be used to populate collections on page load — all models needed at 
         // load time should already be bootstrapped in to place. -- backbone docs
         cwd.fetch();
@@ -258,9 +258,9 @@ var JndexView  = Backbone.View.extend({
     },
 });
 
-var Jndex = new JndexView;
+var Jndex = new JndexView();
 
         }
-    }
+    };
 });
 

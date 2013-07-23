@@ -1,3 +1,4 @@
+/*jshint evil:true */
 javascript:(function(){
     try {
         var d = document;
