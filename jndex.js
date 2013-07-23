@@ -3,7 +3,7 @@ JNDEX.init = function() {
         defaults: function() {
             return {
                 filename: '--',
-                url: '#',
+                img: '#', // should be unknown.png
                 date: new Date(0)
             };
         }
@@ -46,9 +46,45 @@ JNDEX.init = function() {
                   console.log('date', date);
 
                   if (filename && date) {
-                    json.push({filename: filename, date: date});
+                      if (filename.match(/\.(gif|png|jpg)/i)) {
+                          img = filename;
+                      }
+                      else {
+                          img = 'http://localhost/~matthew/jndex/leopard-folder.png';
+                      }
+                    json.push({filename: filename, img: img, date: date});
                   }
                 });
+                
+                if (!json.length) { 
+                    // does not seem to work
+                    //var pre_html = $(data).find('pre').html();
+                    var pre_html = data.match(/<pre>((?:(?!<\/pre>)(?:.|\n))+)/);
+                    console.log('pre_html', pre_html);
+                    if (pre_html[1]) {
+                        var filename;
+                        var date;
+                        var a_regex = /href="([^"]\+)"/;
+                        var d_regex = / ([0-9]+-[A-Za-z]+-[0-9]+ [0-9]+:[0-9]+) /;
+                        pre_html[1].split("\n").forEach(function(line) {
+                            var match = a_regex.exec(line);
+                            if (match && match[1]) {
+                                filename = match[1];
+                            }
+                            match = d_regex.exec(line);
+                            if (match && match[1]) {
+                                var date_int = Date.parse(match[1]);
+                                if (date_int) {
+                                    date = new Date(d);
+                                }
+                            }
+
+                            if (filename && date) {
+                                json.push({filename: filename, date: date});
+                            }
+                        });
+                    }
+                }
 
                 console.log(json);
                 collection.reset(json);               
@@ -176,10 +212,10 @@ JNDEX.init = function() {
             console.log(this);
             this.render();
         },
-        openFile: function(e, file) {
-            console.log('JndexView.openFile');
+        openFile: function(e, file, file2) {
+            console.log('JndexView.openFile', e, file, file2);
             $('#overlay').removeClass('hide');
-            var src = 'http://adurosolutions.com/jndex/358tlz.jpg';
+            var src = file.get('img');
             var img = new Image();
             img.src = src;
 
@@ -208,27 +244,3 @@ JNDEX.init = function() {
     var Jndex = new JndexView;
 };
 
-JNDEX.dependencies_loaded = function() {
-    try {
-        if (jQuery != null && _ != null && Backbone != null) {
-            console.log('all defined');
-            return true;
-        }
-    }
-    catch(e) {
-    }
-    return false;
-}
-
-JNDEX.init_wrapper = function() {
-    console.log('trying to load jndex');
-    if (!JNDEX.dependencies_loaded()) {
-        console.log('failed, will try again');
-        setTimeout(JNDEX.init_wrapper, 100);
-        return;
-    }
-    console.log('loaded');
-    JNDEX.init();
-}
-
-JNDEX.init_wrapper();

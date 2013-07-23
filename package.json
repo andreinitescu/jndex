@@ -1,0 +1,30 @@
+{
+  "name": "jndex",
+  "version": "0.0.1",
+  "description": "JavaScript index / web directory browser",
+  "main": "jndex.js",
+  "dependencies": {
+    "uglify-js": "~1.3.5",
+    "grunt": "~0.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dzaman/jndex.git"
+  },
+  "keywords": [
+    "javascript",
+    "index",
+    "directory",
+    "browser"
+  ],
+  "author": "Matthew Dzaman",
+  "license": "none",
+  "gitHead": "41dee9418fda7d84001b26273fc88237abe27a17",
+  "bugs": {
+    "url": "https://github.com/dzaman/jndex/issues"
+  }
+}

@@ -66,22 +66,33 @@ var f = document.createElement('script');
 f.id = 'file-template';
 f.type = 'text/template';
 f.innerHTML = 
-'<img src="<%= filename %>">' + 
-'<span class="title"><a href="<%= url %>"><%= filename %></a></span>' + 
+'<img src="<%= img %>">' + 
+'<span class="title"><a href="<%= filename %>"><%= filename %></a></span>' + 
 '<span class="date"><% print($.format.date(date, "MM/dd/yy hh:MM a")); %></span>';
 document.body.appendChild(f);
 
 // without HTML doctype, $(window).height/width will to $(document).height/width instead of the visible area
 var newDoctype = document.implementation.createDocumentType('html');
-document.doctype.parentNode.replaceChild(newDoctype, document.doctype);
+if (document.doctype) {
+    document.doctype.parentNode.replaceChild(newDoctype, document.doctype);
+}
+else {
+    document.body.parentNode.parentNode.appendChild(newDoctype);
+}
 
 // load scripts 
 // if backbone is loaded before underscore, we'll have problems
 //      Uncaught TypeError: Cannot call method 'each' of undefined 
 // using Require.js seems like it might solve this problem
-JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/jquery.js');
-JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/underscore.js');
-JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/backbone.js', true);
-JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/jquery.dateFormat-1.0.js');
-JNDEX.loadScript('http://localhost/~matthew/jndex/jndex.js', true);
+//JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/jquery.js');
+//JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/underscore.js');
+//JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/backbone.js', true);
+//JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/jquery.dateFormat-1.0.js');
+//JNDEX.loadScript('http://localhost/~matthew/jndex/jndex.js', true);
+
+var script = document.createElement('script');
+script.src = 'http://localhost/~matthew/jndex/vendor/require.js';
+script.type = 'text/javascript';
+script.setAttribute('data-main', 'http://localhost/~matthew/jndex/main.js');
+document.head.appendChild(script);
 

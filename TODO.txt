@@ -1,6 +1,6 @@
 - empty content message
 - set navigation path
 - support loading new directories
-- use actual images / image placeholders for non-images
-- lightbox for opened images
+- image placeholders for non-images
 - load dependencies with require.js
+- add auto-build with grunt
