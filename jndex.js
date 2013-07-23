@@ -125,7 +125,7 @@ var FileView = Backbone.View.extend({
         $(this.el).trigger('openfile', this.model); 
     },
     render: function() {
-        $(this.el).addClass('span3 thumbnail').html(this.template(this.model.toJSON()));
+        $(this.el).addClass('span2 thumbnail').html(this.template(this.model.toJSON()));
         return this;
     },
     clear: function() {

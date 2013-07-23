@@ -2,6 +2,6 @@
 - set navigation path
 - support loading new directories
 - image placeholders for non-images
-- add auto-build with grunt
 - convert parsing to strategies
 - fix lightbox placement
+- remove bootstrap dependency
