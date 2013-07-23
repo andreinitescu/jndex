@@ -2,5 +2,6 @@
 - set navigation path
 - support loading new directories
 - image placeholders for non-images
-- load dependencies with require.js
 - add auto-build with grunt
+- convert parsing to strategies
+- fix lightbox placement

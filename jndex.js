@@ -27,6 +27,7 @@ var Directory = Backbone.Collection.extend({
             url: window.location
         });
 
+        // yikes, this really needs to be cleaned up...
         request.done(function(data) {
             var json = [];
             $(data).find('tr').each(function() {
@@ -64,14 +65,15 @@ var Directory = Backbone.Collection.extend({
             if (!json.length) { 
                 // does not seem to work
                 //var pre_html = $(data).find('pre').html();
-                var pre_html = data.match(/<pre>((?:(?!<\/pre>)(?:.|\n))+)/);
+                var pre_html = data.match(/<pre>((?:(?!<\/pre>)(?:.|\r\n|\n|\r))+)/);
                 console.log('pre_html', pre_html);
                 if (pre_html[1]) {
                     var filename;
                     var date;
-                    var a_regex = /href="([^"]\+)"/;
+                    var a_regex = /href="([^"]+)"/;
                     var d_regex = / ([0-9]+-[A-Za-z]+-[0-9]+ [0-9]+:[0-9]+) /;
-                    pre_html[1].split("\n").forEach(function(line) {
+                    pre_html[1].split(/\r\n|\r|\n/).forEach(function(line) {
+                        console.log('line', line);
                         var match = a_regex.exec(line);
                         if (match && match[1]) {
                             filename = match[1];
@@ -80,12 +82,18 @@ var Directory = Backbone.Collection.extend({
                         if (match && match[1]) {
                             var date_int = Date.parse(match[1]);
                             if (date_int) {
-                                date = new Date(d);
+                                date = new Date(date_int);
                             }
                         }
 
                         if (filename && date) {
-                            json.push({filename: filename, date: date});
+                            if (filename.match(/\.(gif|png|jpg)/i)) {
+                                img = filename;
+                            }
+                            else {
+                                img = 'http://localhost/~matthew/jndex/leopard-folder.png';
+                            }
+                            json.push({filename: filename, img: img, date: date});
                         }
                     });
                 }
@@ -169,8 +177,10 @@ var JndexView  = Backbone.View.extend({
             var max_width = this.currentFile.h + padding_width/2;
             var max_height = this.currentFile.w + padding_height/2;
             // -- end do this in open
-            var width = Math.min($(window).width(), max_height);
-            var height = Math.min($(window).height(), max_width);
+            //var width = Math.min($(window).width(), max_height);
+            //var height = Math.min($(window).height(), max_width);
+            var width = Math.min(window.innerWidth, max_height);
+            var height = Math.min(window.innerHeight, max_width);
 
             if (width < max_width || height < max_height) {
                 var r_width = width/max_width;
@@ -189,8 +199,10 @@ var JndexView  = Backbone.View.extend({
             $('#lightbox').find('img').height(height-padding_height); 
             $('#lightbox').find('img').width(width-padding_width);
 
-            $('#lightbox').css('left', ($(window).width()-width)/2);
-            $('#lightbox').css('top', ($(window).height()-height)/2);
+            //$('#lightbox').css('left', ($(window).width()-width)/2);
+            //$('#lightbox').css('top', ($(window).height()-height)/2);
+            $('#lightbox').css('left', (window.innerWidth-width)/2);
+            $('#lightbox').css('top', (window.innerHeight-height)/2);
         }
     },
     setDirectory: function() {

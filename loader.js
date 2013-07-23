@@ -13,12 +13,6 @@ JNDEX.loadCss = function(src, bustcache) {
     css.media = 'screen';
     document.head.appendChild(css);
 };
-JNDEX.loadScript = function (src, bustcache) {
-    var script = document.createElement('script');
-    script.src = JNDEX.bustCache(src, bustcache);
-    script.type = 'text/javascript';
-    document.head.appendChild(script);
-};
 
 // load css
 JNDEX.loadCss('http://localhost/~matthew/jndex/vendor/bootstrap.css');
@@ -79,16 +73,6 @@ if (document.doctype) {
 else {
     document.body.parentNode.parentNode.appendChild(newDoctype);
 }
-
-// load scripts 
-// if backbone is loaded before underscore, we'll have problems
-//      Uncaught TypeError: Cannot call method 'each' of undefined 
-// using Require.js seems like it might solve this problem
-//JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/jquery.js');
-//JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/underscore.js');
-//JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/backbone.js', true);
-//JNDEX.loadScript('http://localhost/~matthew/jndex/vendor/jquery.dateFormat-1.0.js');
-//JNDEX.loadScript('http://localhost/~matthew/jndex/jndex.js', true);
 
 var script = document.createElement('script');
 script.src = 'http://localhost/~matthew/jndex/vendor/require.js';
