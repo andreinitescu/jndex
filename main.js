@@ -14,10 +14,6 @@ require.config({
             deps: ['underscore', 'jquery'],
             exports: 'Backbone'
         },
-        jndex: {
-            deps: ['jquery', 'jquery.dateFormat', 'underscore', 'backbone'],
-            exports: 'JNDEX'
-        }, 
         'jquery.dateFormat': ['jquery']
     }
 });
@@ -25,8 +21,5 @@ require.config({
 require([
     'jndex'
 ], function(JNDEX) {
-    console.log('loaded');
-    console.log(JNDEX);
     JNDEX.init();
-    console.log('inited');
 });
