@@ -5,4 +5,3 @@
 - fix lightbox placement
 - remove bootstrap dependency
 - load new directories when clicked
-- figure out why JNDEX isn't exported like $, _, and Backbone

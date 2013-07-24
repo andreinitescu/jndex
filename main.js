@@ -22,5 +22,4 @@ require([
     'jndex'
 ], function(JNDEX) {
     JNDEX.loadUrl(window.location.pathname);
-    window.JNDEX = JNDEX;
 });
