@@ -1,4 +1,4 @@
-define("jndex", [
+define([
     'jquery', 'underscore', 'backbone', 'jquery.dateFormat'
 ], function($, _, Backbone) { 
 
