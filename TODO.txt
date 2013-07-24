@@ -1,7 +1,8 @@
 - empty content message
-- set navigation path
-- support loading new directories
+- set navigation path in breadcrumbs
 - image placeholders for non-images
 - convert parsing to strategies
 - fix lightbox placement
 - remove bootstrap dependency
+- load new directories when clicked
+- figure out why JNDEX isn't exported like $, _, and Backbone

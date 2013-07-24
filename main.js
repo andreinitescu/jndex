@@ -21,5 +21,6 @@ require.config({
 require([
     'jndex'
 ], function(JNDEX) {
-    JNDEX.init();
+    JNDEX.loadUrl(window.location.pathname);
+    window.JNDEX = JNDEX;
 });
