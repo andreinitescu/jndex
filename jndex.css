@@ -4,18 +4,26 @@ body {
 
 #header {
     background-color: #000;
-    color: #FFF;
     min-height: 50px;
     line-height: 50px;
     font-size: 17px;
     width: 100%;
 }
 
-#header a,
-#header a:hover {
+#header a.title,
+#header a.title:hover {
     padding-left: 15px;
-    color: #FFF;
     text-decoration: none;
+    color: #FFF;
+}
+
+#header a.closebtn {
+    font-size: 17px;
+    padding-right: 15px;
+    float: right;
+    text-decoration: none;
+    color: #FFF;
+    font-weight: bold;
 }
 
 #content {

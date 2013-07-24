@@ -37,10 +37,14 @@ JNDEX.loadCss('http://localhost/~matthew/jndex/jndex.css', true);
 //'    </div>' + 
 //'</div>';
 
+// ✖
+// ✕
 var d = document.createElement('div');
 d.id = 'jndex';
 d.innerHTML = 
-'    <div id="header"><a href="https://github.com/dzaman/jndex">jndex</a></div>' + 
+'    <div id="header">' + 
+'    <a class="title" href="https://github.com/dzaman/jndex">jndex</a>' + 
+'    <a class="closebtn" href="javascript:(window.location=window.location)">✕</a></div>' + 
 '    <ul id="breadcrumb" class="breadcrumb">' + 
 //'        <li><a href="#">Home</a> <span class="divider">/</span></li>' + 
 //'        <li><a href="#">Library</a> <span class="divider">/</span></li>' + 
