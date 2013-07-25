@@ -85,3 +85,8 @@ body {
     padding: 5px;
     cursor: pointer;
 }
+
+.breadcrumb li:last-child span.divider {
+    display: none;
+    visibility: hidden;
+}

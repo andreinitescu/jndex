@@ -1,8 +1,9 @@
 - empty content message
-- set navigation path in breadcrumbs
 - image placeholders for non-images
+- use fonts from fontello
 - convert parsing to strategies
-- fix lightbox placement
-- remove bootstrap dependency
-- load new directories when clicked
+- remove bootstrap dependency (probably saves a substantial amount of css)
 - add zoom and close buttons
+- resize when clicking on edge and holding
+- determine navigation flow when clicking on non-folders and non-images
+- error handling for viewing non-index directories 

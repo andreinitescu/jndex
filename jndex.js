@@ -215,6 +215,24 @@ define([
         resetDirectory: function() {
             console.log('JndexView.resetDirectory');
             console.log(currentDirectory.url);
+
+            var breadcrumb_template = $('#breadcrumb-template').html();
+            this.$('#breadcrumb li').remove();
+            var currentPath = '/';
+            var node = _.template(breadcrumb_template, {label: window.location.hostname, link: currentPath}); 
+            this.$('#breadcrumb').append(node);
+            if (window.location.pathname) {
+                var path = window.location.pathname.split("\/");
+                for (var i = 0; i < path.length; i++) {
+                    if (path[i] == '') {
+                        continue; 
+                    }
+                    currentPath += path[i] + '/';
+                    node = _.template(breadcrumb_template, {label: path[i], link: currentPath});
+                    this.$('#breadcrumb').append(node);
+                }
+            }
+
             this.min_width = 0;
             this.$('#thumbnails .thumbnail').remove();
             currentDirectory.each(function(file) {
@@ -282,8 +300,9 @@ define([
             $('#overlay').addClass('hide');
             $('#lightbox').find('img').remove();
         },
-        navigate: function() {
-            console.log('navigation');
+        navigate: function(event, element) {
+            event.preventDefault();
+            router.navigate(event.target.pathname, {trigger:true});
         }
     });
 

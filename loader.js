@@ -69,6 +69,12 @@
     '<span class="date"><% print($.format.date(date, "MM/dd/yy hh:MM a")); %></span>';
     document.body.appendChild(f);
 
+    var b = document.createElement('script');
+    b.id = 'breadcrumb-template';
+    b.type = 'text/template';
+    b.innerHTML = '<li><a href="<%= link %>"><%= label %></a> <span class="divider">/</span></li>';
+    document.body.appendChild(b);
+
     // without HTML doctype, $(window).height/width will to $(document).height/width instead of the visible area
     var newDoctype = document.implementation.createDocumentType('html');
     if (document.doctype) {
