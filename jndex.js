@@ -70,7 +70,7 @@ define([
                     //var pre_html = $(data).find('pre').html();
                     var pre_html = data.match(/<pre>((?:(?!<\/pre>)(?:.|\r\n|\n|\r))+)/);
                     console.log('pre_html', pre_html);
-                    if (pre_html[1]) {
+                    if (pre_html && pre_html.length >= 2 && pre_html[1]) {
                         var filename;
                         var date;
                         var a_regex = /(?:href|HREF)="([^"]+)"/;
@@ -103,9 +103,7 @@ define([
                     }
                 }
 
-                console.log(json);
                 collection.reset(json);               
-                console.log(collection.toJSON());
             });
 
             request.fail(function() {
@@ -235,25 +233,30 @@ define([
 
             this.min_width = 0;
             this.$('#thumbnails .thumbnail').remove();
-            currentDirectory.each(function(file) {
-                var view = new FileView({model: file});
-                var el = view.render().el;
-                // -- works, but 'this' doesn't keep track of the events
-                //$(el).on('click', function() { console.log('click2', this); });
-                // -- 'this' keeps track of the events, but it doesn't work
-                // -- probably why this.listenTo($(window), 'resize', ...) didn't work either
-                //this.listenTo($(el), 'click', function() { console.log('click', this); });
-                this.$("#thumbnails").append(el);
-                var min_width = ($(el).find('.title').outerWidth(true)||0) +
-                                ($(el).find('.date').outerWidth(true)||0);
+            if (currentDirectory.length) {
+                this.$('#thumbnails').removeClass('hide');
+                this.$('#empty').addClass('hide');
+                currentDirectory.each(function(file) {
+                    var view = new FileView({model: file});
+                    var el = view.render().el;
+                    // -- works, but 'this' doesn't keep track of the events
+                    //$(el).on('click', function() { console.log('click2', this); });
+                    // -- 'this' keeps track of the events, but it doesn't work
+                    // -- probably why this.listenTo($(window), 'resize', ...) didn't work either
+                    //this.listenTo($(el), 'click', function() { console.log('click', this); });
+                    this.$("#thumbnails").append(el);
+                    var min_width = ($(el).find('.title').outerWidth(true)||0) +
+                                    ($(el).find('.date').outerWidth(true)||0);
 
-                console.log(this);
-
-                if (min_width > this.min_width) {
-                    this.min_width = min_width;
-                }
-            }, this);
-            console.log(this);
+                    if (min_width > this.min_width) {
+                        this.min_width = min_width;
+                    }
+                }, this);
+            }
+            else {
+                this.$('#thumbnails').addClass('hide');
+                this.$('#empty').removeClass('hide');
+            }
 
 
 

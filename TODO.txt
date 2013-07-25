@@ -1,9 +1,17 @@
-- empty content message
+- error handling for viewing non-index directories 
+    - what else is needed?
+    - allow forced refresh?
+    - what about on actual failure?
+
 - image placeholders for non-images
 - use fonts from fontello
 - convert parsing to strategies
+- determine navigation flow when clicking on non-folders and non-images
+
 - remove bootstrap dependency (probably saves a substantial amount of css)
+
 - add zoom and close buttons
 - resize when clicking on edge and holding
-- determine navigation flow when clicking on non-folders and non-images
-- error handling for viewing non-index directories 
+
+- add spinner for ajax requests
+

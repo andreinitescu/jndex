@@ -48,12 +48,13 @@
     '    <ul id="breadcrumb" class="breadcrumb">' + 
     //'        <li><a href="#">Home</a> <span class="divider">/</span></li>' + 
     //'        <li><a href="#">Library</a> <span class="divider">/</span></li>' + 
-    '        <li class="active">Directory browsing coming soon...</li>' + 
+    //'        <li class="active">Directory browsing coming soon...</li>' + 
     '    </ul>' + 
     '    <div id="content">' + 
     '        <div class="row-fluid">' + 
     '            <ul id="thumbnails" class="thumbnails">' + 
     '            </ul>' + 
+    '            <div id="empty" class="hide">Empty directory / not an index</div>' + 
     '        </div>' + 
     '    <div id="overlay" class="hide"></div>' + 
     '    <div id="lightbox" class="invisible"></div>' +

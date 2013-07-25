@@ -90,3 +90,11 @@ body {
     display: none;
     visibility: hidden;
 }
+
+#empty {
+    width: 100%;
+    text-align: center;
+    color: #CCCCCC;
+    font-size: 30px;
+    margin-top: 40px;
+}
