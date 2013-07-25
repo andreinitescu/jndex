@@ -5,3 +5,4 @@
 - fix lightbox placement
 - remove bootstrap dependency
 - load new directories when clicked
+- add zoom and close buttons

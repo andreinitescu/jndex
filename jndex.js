@@ -3,6 +3,9 @@ define([
 ], function($, _, Backbone) { 
 
     var File = Backbone.Model.extend({
+        initialize: function() {
+            this.set('is_image', !(this.get('img').match(/leopard-folder/)));
+        },
         defaults: function() {
             return {
                 filename: '--',
@@ -70,8 +73,9 @@ define([
                     if (pre_html[1]) {
                         var filename;
                         var date;
-                        var a_regex = /href="([^"]+)"/;
+                        var a_regex = /(?:href|HREF)="([^"]+)"/;
                         var d_regex = / ([0-9]+-[A-Za-z]+-[0-9]+ [0-9]+:[0-9]+) /;
+                        // interpret line as HTML
                         pre_html[1].split(/\r\n|\r|\n/).forEach(function(line) {
                             console.log('line', line);
                             var match = a_regex.exec(line);
@@ -121,7 +125,8 @@ define([
             'click img': 'open',
             'click a': 'open'
         },
-        open: function() {
+        open: function(event) {
+            event.preventDefault();
             $(this.el).trigger('openfile', this.model); 
         },
         render: function() {
@@ -173,13 +178,16 @@ define([
                 // do this in open
                 var padding_width = $('#lightbox').outerWidth()-$('#lightbox').width();
                 var padding_height = $('#lightbox').outerHeight()-$('#lightbox').height();
-                var max_width = this.currentFile.h + padding_width/2;
-                var max_height = this.currentFile.w + padding_height/2;
+                var max_width = this.currentFile.w + padding_width/2;
+                var max_height = this.currentFile.h + padding_height/2;
                 // -- end do this in open
                 //var width = Math.min($(window).width(), max_height);
                 //var height = Math.min($(window).height(), max_width);
-                var width = Math.min(window.innerWidth, max_height);
-                var height = Math.min(window.innerHeight, max_width);
+                var width = Math.min(window.innerWidth, max_width);
+                var height = Math.min(window.innerHeight, max_height);
+
+                console.log(window.innerWidth, max_width, width);
+                console.log(window.innerHeight, max_height, height);
 
                 if (width < max_width || height < max_height) {
                     var r_width = width/max_width;
@@ -200,8 +208,8 @@ define([
 
                 //$('#lightbox').css('left', ($(window).width()-width)/2);
                 //$('#lightbox').css('top', ($(window).height()-height)/2);
-                $('#lightbox').css('left', (window.innerWidth-width)/2);
-                $('#lightbox').css('top', (window.innerHeight-height)/2);
+                $('#lightbox').css('left', window.scrollX + (window.innerWidth-width)/2);
+                $('#lightbox').css('top', window.scrollY + (window.innerHeight-height)/2);
             }
         },
         resetDirectory: function() {
@@ -235,20 +243,37 @@ define([
         },
         openFile: function(e, file, file2) {
             console.log('JndexView.openFile', e, file, file2);
-            $('#overlay').removeClass('hide');
-            var src = file.get('img');
-            var img = new Image();
-            img.src = src;
 
-            this.currentFile = {
-                img: img,
-                h: img.height, 
-                w: img.width
-            };
+            if (file.get('is_image')) {
+                $('#overlay').removeClass('hide');
+                var src = file.get('img');
+                var img = new Image();
+                img.src = src;
 
-            $('#lightbox').append(img);
-            this.render();
-            $('#lightbox').removeClass('invisible');
+                this.currentFile = {
+                    img: img,
+                    h: img.height, 
+                    w: img.width
+                };
+
+                $('#lightbox').append(img);
+                this.render();
+                $('#lightbox').removeClass('invisible');
+            }
+            else {
+                console.log(file.get('filename'));
+                var filename = file.get('filename');
+                var url;
+
+                if (filename.match("^\/")) {
+                    url = filename;
+                }
+                else {
+                    url = window.location.pathname + file.get('filename');
+                }
+                router.navigate(url, {trigger:true});
+
+            }
         },
         closeFile: function() {
             console.log('JndexView.closeFile');
@@ -267,8 +292,9 @@ define([
             '*path': 'all'
         },
         all: function(path) {
+            path = '/' + (path || '');
             console.log('navigating to... ', path);
-            currentDirectory.fetch('/' + path);
+            currentDirectory.fetch(path);
         }
     });
 
@@ -281,6 +307,7 @@ define([
 
     return {
         loadUrl: function(url) {
+            console.log('url', url);
             router.navigate(url, {trigger:true});
         }
     };

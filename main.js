@@ -1,4 +1,7 @@
 require.config({
+    /* cache busting */
+    /* http://stackoverflow.com/questions/8315088/prevent-requirejs-from-caching-required-scripts */
+    urlArgs: "bust="+(new Date()).getTime(),
     paths: {
         jquery: 'vendor/jquery',
         underscore: 'vendor/underscore',
@@ -21,5 +24,5 @@ require.config({
 require([
     'jndex'
 ], function(JNDEX) {
-    JNDEX.loadUrl(window.location.pathname);
+    JNDEX.loadUrl(window.location.pathname||'');
 });

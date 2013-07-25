@@ -81,7 +81,7 @@
     var script = document.createElement('script');
     script.src = 'http://localhost/~matthew/jndex/vendor/require.js';
     script.type = 'text/javascript';
-    script.setAttribute('data-main', 'http://localhost/~matthew/jndex/main.js');
+    script.setAttribute('data-main', bustCache('http://localhost/~matthew/jndex/main.js', true));
     document.head.appendChild(script);
 
     // insert JLOAD config (# of items per row)
