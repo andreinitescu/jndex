@@ -3,6 +3,8 @@
     - allow forced refresh?
     - what about on actual failure?
 
+- strip out parent directories, current directory
+
 - image placeholders for non-images
 - use fonts from fontello
 - convert parsing to strategies
@@ -14,4 +16,6 @@
 - resize when clicking on edge and holding
 
 - add spinner for ajax requests
+
+- hide pointer on overlay
 

@@ -4,16 +4,157 @@ define([
 
     var File = Backbone.Model.extend({
         initialize: function() {
-            this.set('is_image', !(this.get('img').match(/leopard-folder/)));
+            this.set('is_image', (this.get('type') == 'image'));
         },
         defaults: function() {
             return {
-                filename: '--',
-                img: '#', // should be unknown.png
+                name: '--',
+                type: '--',
                 date: new Date(0)
             };
         }
     });
+
+    var DirectoryResponseHandler = function() {
+
+        var translateFilePath = function(href) {
+            return href;
+        };
+
+        var isSubfile = function(filename) {
+            return true;
+        };
+
+        var parseTable = function(data) {
+            return $(data).find('tr').each(function() {
+                var name = null;
+                var date = null;
+
+                $(this).find('td').each(function() {
+                    var a = $(this).find('a');
+                    if (a) {
+                        var href = a.attr('href');
+                        if (href) {
+                            name = translateFilePath(href);
+                        }
+                    }
+                    var text = $(this).html();
+                    var d = Date.parse(text);
+                    if (d) {
+                        date = new Date(d);
+                    }
+                });
+
+                return {name: name, date: date};
+            });
+        };
+
+        var parsePre = function(data) { 
+            // does not seem to work
+            //var pre_html = $(data).find('pre').html();
+            var pre_html = data.match(/<pre>((?:(?!<\/pre>)(?:.|\r\n|\n|\r))+)/);
+            console.log('pre_html', pre_html);
+            if (!pre_html || pre_html.length < 2 || !pre_html[1]) {
+                return [];
+            }
+
+            var a_regex = /(?:href|HREF)="([^"]+)"/;
+            var d_regex = / ([0-9]+-[A-Za-z]+-[0-9]+ [0-9]+:[0-9]+) /;
+            return pre_html[1].split(/\r\n|\r|\n/).forEach(function(line) {
+                var filename;
+                var date;
+                console.log('line', line);
+
+                var match = a_regex.exec(line);
+                if (match && match[1]) {
+                    filename = match[1];
+                }
+
+                match = d_regex.exec(line);
+                if (match && match[1]) {
+                    var date_int = Date.parse(match[1]);
+                    if (date_int) {
+                        date = new Date(date_int);
+                    }
+                }
+
+                return {name: filename, date: date};
+            });
+        };
+        
+        var requireNameAndDate = function(data) {
+            return data.name && data.date;
+        };
+
+        var parseFileType = function(name) {
+            if (name.match(/\.(jpg|gif|png|jpg2|tiff)$/i)) {
+                return 'image';
+            }
+            else if (name.match(/\.(avi|mkv|mp4|mov|oog|mpg|mpeg|wmv|flv)$/i)) {
+                return 'video';
+            }
+            else if (name.match(/\.(aiff|au|raw|wav|flac|pac|m4a|wma|mp3|aac|mid)$/i)) {
+                return 'audio';
+            }
+            else if (name.match(/\.exe$/i)) {
+                return 'windows-executable';
+            }
+            else if (name.match(/\.(txt|rtf|md|pod|doc|docx)$/i)) {
+                return 'text-document';
+            }
+            else if (name.match(/\.apk$/i)) {
+                return 'android-executable';
+            }
+            else if (name.match(/\.(zip|bz2|gz|rar|tar)$/i)) {
+                return 'archive';
+            }
+            else if (name.match(/\.(xls|numbers|csv)$/i)) {
+                return 'spreadsheet';
+            }
+            else if (name.match(/\.(php|pl|pm|c|cc|rb|java|js|html|xhtml|xml|json|py)$/i)) {
+                return 'code';
+            }
+            else if (name.match(/\.(iso|dmg)$/i)) {
+                return 'disc';
+            }
+            else if (name.match(/\/[A-Za-z0-9-_.]+\.app$/i)) {
+                return 'osx-executable';
+            }
+            else if (name.match(/\/$/)) {
+                return 'directory';
+            }
+            else {
+                return 'file';
+            }
+        };
+
+        return {
+            parse: function(data, url) {
+                var files = [];
+
+                if (data.find('table')) {
+                    files = parseTable(data).filter(requireNameAndDate);
+                }
+                if (!files && data.find('pre')) {
+                    files = parsePre(data).filter(requireNameAndDate);
+                }
+
+                files = _.filter(files, function() {
+                    return isSubfile(name, url);
+                });
+
+                files = _.map(files, function(file) {
+                    file.type = parseFileType(file.name);
+                    return file;
+                });
+
+                return files;
+            }
+        };
+    };
+
+    directoryResponseHandler = new DirectoryResponseHandler();
+
 
     var Directory = Backbone.Collection.extend({
         model: File,
@@ -30,80 +171,11 @@ define([
                 url: url
             });
 
-            // yikes, this really needs to be cleaned up...
             request.done(function(data) {
-                var json = [];
-                $(data).find('tr').each(function() {
-                  var filename = null;
-                  var date = null;
-
-                  $(this).find('td').each(function() {
-                    var a = $(this).find('a');
-                    if (a) {
-                      var href = a.attr('href');
-                      if (href) {
-                        filename = href;
-                      }
-                    }
-                    var text = $(this).html();
-                    var d = Date.parse(text);
-                    if (d) {
-                      date = new Date(d);
-                    }
-                  });
-
-                  console.log('date', date);
-
-                  if (filename && date) {
-                      if (filename.match(/\.(gif|png|jpg)/i)) {
-                          img = filename;
-                      }
-                      else {
-                          img = 'http://localhost/~matthew/jndex/leopard-folder.png';
-                      }
-                    json.push({filename: filename, img: img, date: date});
-                  }
-                });
-                
-                if (!json.length) { 
-                    // does not seem to work
-                    //var pre_html = $(data).find('pre').html();
-                    var pre_html = data.match(/<pre>((?:(?!<\/pre>)(?:.|\r\n|\n|\r))+)/);
-                    console.log('pre_html', pre_html);
-                    if (pre_html && pre_html.length >= 2 && pre_html[1]) {
-                        var filename;
-                        var date;
-                        var a_regex = /(?:href|HREF)="([^"]+)"/;
-                        var d_regex = / ([0-9]+-[A-Za-z]+-[0-9]+ [0-9]+:[0-9]+) /;
-                        // interpret line as HTML
-                        pre_html[1].split(/\r\n|\r|\n/).forEach(function(line) {
-                            console.log('line', line);
-                            var match = a_regex.exec(line);
-                            if (match && match[1]) {
-                                filename = match[1];
-                            }
-                            match = d_regex.exec(line);
-                            if (match && match[1]) {
-                                var date_int = Date.parse(match[1]);
-                                if (date_int) {
-                                    date = new Date(date_int);
-                                }
-                            }
-
-                            if (filename && date) {
-                                if (filename.match(/\.(gif|png|jpg)/i)) {
-                                    img = filename;
-                                }
-                                else {
-                                    img = 'http://localhost/~matthew/jndex/leopard-folder.png';
-                                }
-                                json.push({filename: filename, img: img, date: date});
-                            }
-                        });
-                    }
+                var models = directoryResponseHandler.parse(data, url);
+                if (models) {
+                    collection.reset(models);               
                 }
-
-                collection.reset(json);               
             });
 
             request.fail(function() {
@@ -222,7 +294,7 @@ define([
             if (window.location.pathname) {
                 var path = window.location.pathname.split("\/");
                 for (var i = 0; i < path.length; i++) {
-                    if (path[i] == '') {
+                    if (path[i] === '') {
                         continue; 
                     }
                     currentPath += path[i] + '/';
