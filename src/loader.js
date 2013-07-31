@@ -15,9 +15,9 @@
     };
 
     // load css
-    loadCss('BASE_URI/vendor/bootstrap.css');
-    loadCss('BASE_URI/vendor/fontello/css/fontello.css');
-    loadCss('BASE_URI/vendor/fontello/css/animation.css');
+    loadCss('VENDOR_URI/bootstrap.css');
+    loadCss('VENDOR_URI/fontello/css/fontello.css');
+    loadCss('VENDOR_URI/fontello/css/animation.css');
     loadCss('BASE_URI/jndex.css', true);
 
     // write document body
@@ -85,7 +85,7 @@
     }
 
     var script = document.createElement('script');
-    script.src = 'BASE_URI/vendor/require.js';
+    script.src = 'REQUIREJS_URI/MODULE_PATH:requirejs';
     script.type = 'text/javascript';
     script.setAttribute('data-main', bustCache('BASE_URI/main.js', true));
     document.head.appendChild(script);

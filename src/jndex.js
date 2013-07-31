@@ -132,6 +132,8 @@ define([
             parse: function(data, url) {
                 var files = [];
 
+                console.log('parse', url, data);
+
                 if (data.find('table')) {
                     files = parseTable(data).filter(requireNameAndDate);
                 }

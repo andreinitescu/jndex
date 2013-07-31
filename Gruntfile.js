@@ -28,11 +28,49 @@ module.exports = function(grunt) {
             constants: {
                 src: ['src/*.js'],
                 dest: ['build/'],
-                replacements: [{ 
-                    from: 'BASE_URI',
-                    to: jndex.base_uri
-                }]
+                replacements: (function() {
+                    if (grunt.option('mode') == 'release') { 
+                        config = jndex.release;
+                    }
+                    else {
+                        config = jndex.build;
+                    }
+
+                    return [
+                        {
+                            from: 'BASE_URI',
+                            to: config.base_uri
+                        },{
+                            from: 'REQUIREJS_URI',
+                            to: config.requirejs_uri
+                        },{
+                            from: 'VENDOR_URI',
+                            to: config.vendor_uri
+                        }, {
+                            from: /MODULE_PATH:([A-Za-z0-9_\-.]+)/g,
+                            to: function(matched) { 
+                                var module = matched.substring(12);
+                                return config.requirejs_modules[module];
+                            }
+                        }
+                    ];
+                })()
             }
+
+                /*{
+                src: ['src/*.js'],
+                dest: ['build/'],
+                replacements: function() { 
+                    //  "requirejs_modules": [
+                    //      "jquery": "jquery/2.0.3/jquery.min.js",
+                    //      "underscorejs": "underscore.js/1.5.1/underscore-min.js",
+                    //      "backbonejs": "backbone.js/1.0.0/backbone-min.js",
+                    //      "jquery.dateFormat": "jquery-dateFormat/1.0/jquery.dateFormat.min.js",
+                    //      "requirejs": "require.js/2.1.8/require.min.js"
+                    //  ]
+                    return replacements;
+                }
+            }*/
         },
 
         uglify: {

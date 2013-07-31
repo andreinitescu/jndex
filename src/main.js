@@ -2,12 +2,12 @@ require.config({
     /* cache busting */
     /* http://stackoverflow.com/questions/8315088/prevent-requirejs-from-caching-required-scripts */
     urlArgs: "bust="+(new Date()).getTime(),
+    baseUrl: 'REQUIREJS_URI/',
     paths: {
-        jquery: 'vendor/jquery',
-        underscore: 'vendor/underscore',
-        backbone: 'vendor/backbone',
-        jndex: 'jndex',
-        'jquery.dateFormat': 'vendor/jquery.dateFormat-1.0'
+        jquery: 'MODULE_PATH:jquery',
+        underscore: 'MODULE_PATH:underscorejs',
+        backbone: 'MODULE_PATH:backbonejs',
+        'jquery.dateFormat': 'MODULE_PATH:jquery.dateFormat'
     },
     shim: {
         underscore: {
@@ -22,7 +22,7 @@ require.config({
 });
 
 require([
-    'jndex'
+    'BASE_URI/jndex.js'
 ], function(JNDEX) {
     JNDEX.loadUrl(window.location.pathname||'');
 });
