@@ -52,6 +52,13 @@
             '<ul id="thumbnails" class="thumbnails"></ul>' + 
             // this should use alert markup
             '<div id="empty" class="hide">Empty directory / not an index</div>' + 
+            '<div id="error" class="hide">' + 
+            '<div class="alert alert-block">' + 
+                '<button type="button" class="close" data-dismiss="alert">&times;</button>' + 
+                '<h4>Warning!</h4>' + 
+                '<p>...</p>' + 
+            '</div>' + 
+            '</div>' + 
         '</div>' + 
     '<div id="overlay" class="hide"></div>' + 
     '<div id="lightbox" class="invisible"></div>' +

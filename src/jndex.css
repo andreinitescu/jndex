@@ -110,3 +110,15 @@ body {
     float: left;
     cursor: pointer;
 }
+
+#error {
+    position: fixed;
+    width: 100%;
+    top: 200px;
+    display: none;
+}
+
+#error div {
+    margin: 0px auto;
+    width: 500px;
+}

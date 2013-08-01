@@ -1,18 +1,12 @@
-- error handling for viewing non-index directories 
-    - allow forced refresh?
-    - what about on actual failure?
+v0.1
 
-- show failure messages on ajax failure
-- update failure messages (should they use alerts?)
+0. strip out parent directories, current directory
+1. on error, show red error dialog
+2. on bad directory contents, show yellow warnign dialog w/ option to force
+3. show progress next to X
+4. when inactive, progress should be 'refresh' button
+5. add zoom button (fade in/out on mouse movement)
+6. remove bootstrap dependency (probably saves a substantial amount of css)
 
-- strip out parent directories, current directory
-
-- streamline fontello vendoring
-
-- remove bootstrap dependency (probably saves a substantial amount of css)
-
-- add zoom and close buttons
+future
 - resize when clicking on edge and holding
-
-- add spinner for ajax requests
-

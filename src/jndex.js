@@ -182,13 +182,10 @@ define([
 
     var Directory = Backbone.Collection.extend({
         model: File,
-        comparator: 'filename',
+        comparator: 'name',
         url: null,
         fetch: function(url) {
             var collection = this;
-
-            console.log('Dictionary.fetch');
-
             this.url = url;
 
             var request = $.ajax({
@@ -200,10 +197,11 @@ define([
                 if (models) {
                     collection.reset(models);               
                 }
+                setTimeout(function() { console.log('triggering error'); collection.trigger('error', {status: 500, statusText: 'internal server error'}); }, 500);
             });
 
-            request.fail(function() {
-                console.log('Directory.fetch failed');    
+            request.fail(function(xhr) {
+                collection.trigger('error', {status: xhr.status, statusText: xhr.statusText});
             });
         }
     });
@@ -248,6 +246,8 @@ define([
         initialize: function() {
             console.log('JndexView.initialize');
             this.listenTo(currentDirectory, 'reset', this.resetDirectory);
+            this.listenTo(currentDirectory, 'error', this.handleError);
+
             // there must be a better way to do this
             var jndex = this;
             $(window).resize(function() { jndex.render(); });
@@ -309,6 +309,13 @@ define([
                 $('#lightbox').css('left', window.scrollX + (window.innerWidth-width)/2);
                 $('#lightbox').css('top', window.scrollY + (window.innerHeight-height)/2);
             }
+        },
+        handleError: function(error) {
+            $('#error').fadeIn(300, function() {
+                setTimeout(function() {
+                    $('#error').fadeOut(1000);
+                }, 2000);
+            });
         },
         resetDirectory: function() {
             console.log('JndexView.resetDirectory');
