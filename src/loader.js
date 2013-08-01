@@ -16,7 +16,7 @@
 
     // load css
     loadCss('VENDOR_URI/bootstrap.css');
-    loadCss('VENDOR_URI/fontello/css/fontello.css');
+    loadCss('VENDOR_URI/fontello/css/fontello.css', true);
     loadCss('VENDOR_URI/fontello/css/animation.css');
     loadCss('BASE_URI/jndex.css', true);
 
@@ -64,9 +64,13 @@
     f.id = 'file-template';
     f.type = 'text/template';
     f.innerHTML = 
-    '<img src="<%= img %>">' + // branch based on file type
+    '<% if (type == "image") { %>' + 
+    '<img src="<%= name %>">' + 
+    '<% } else { %>' + 
+    '<div class="icon icon-<%= type %>"></div>' + 
+    '<% } %>' + 
     '<span class="title"><a href="<%= name %>"><%= name %></a></span>' + 
-    '<span class="date"><% print($.format.date(date, "MM/dd/yy hh:MM a")); %></span>';
+    '<span class="date"><% print($.format.date(date, "MM/dd/yy hh:MM a")); %></span>'; 
     document.body.appendChild(f);
 
     var b = document.createElement('script');

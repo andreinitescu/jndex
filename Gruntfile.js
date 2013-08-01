@@ -56,21 +56,6 @@ module.exports = function(grunt) {
                     ];
                 })()
             }
-
-                /*{
-                src: ['src/*.js'],
-                dest: ['build/'],
-                replacements: function() { 
-                    //  "requirejs_modules": [
-                    //      "jquery": "jquery/2.0.3/jquery.min.js",
-                    //      "underscorejs": "underscore.js/1.5.1/underscore-min.js",
-                    //      "backbonejs": "backbone.js/1.0.0/backbone-min.js",
-                    //      "jquery.dateFormat": "jquery-dateFormat/1.0/jquery.dateFormat.min.js",
-                    //      "requirejs": "require.js/2.1.8/require.min.js"
-                    //  ]
-                    return replacements;
-                }
-            }*/
         },
 
         uglify: {
@@ -122,7 +107,7 @@ module.exports = function(grunt) {
                 }
             },
             css: {
-                files: '*.css',
+                files: 'src/*.css',
                 tasks: ['copy'],
                 options: {
                     interrupt: true

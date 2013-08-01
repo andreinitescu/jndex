@@ -98,3 +98,15 @@ body {
     font-size: 30px;
     margin-top: 40px;
 }
+
+.icon {
+    font-size: 100px;
+    /*line-height: 165px;*/
+    width: 165px;
+    height: 101px;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    text-align: center;
+    float: left;
+    cursor: pointer;
+}

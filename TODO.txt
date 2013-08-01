@@ -1,14 +1,13 @@
 - error handling for viewing non-index directories 
-    - what else is needed?
     - allow forced refresh?
     - what about on actual failure?
 
+- show failure messages on ajax failure
+- update failure messages (should they use alerts?)
+
 - strip out parent directories, current directory
 
-- image placeholders for non-images
-- use fonts from fontello
-- convert parsing to strategies
-- determine navigation flow when clicking on non-folders and non-images
+- streamline fontello vendoring
 
 - remove bootstrap dependency (probably saves a substantial amount of css)
 
@@ -16,6 +15,4 @@
 - resize when clicking on edge and holding
 
 - add spinner for ajax requests
-
-- hide pointer on overlay
 

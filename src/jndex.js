@@ -4,7 +4,7 @@ define([
 
     var File = Backbone.Model.extend({
         initialize: function() {
-            this.set('is_image', (this.get('type') == 'image'));
+            // none
         },
         defaults: function() {
             return {
@@ -12,6 +12,12 @@ define([
                 type: '--',
                 date: new Date(0)
             };
+        },
+        isImg: function() {
+            return this.get('type') == 'image';
+        },
+        isDir: function() {
+            return this.get('type') == 'directory';
         }
     });
 
@@ -26,7 +32,8 @@ define([
         };
 
         var parseTable = function(data) {
-            return $(data).find('tr').each(function() {
+            console.log('parsing table');
+            return $.makeArray($(data).find('tr').map(function() {
                 var name = null;
                 var date = null;
 
@@ -46,7 +53,7 @@ define([
                 });
 
                 return {name: name, date: date};
-            });
+            }));
         };
 
         var parsePre = function(data) { 
@@ -60,7 +67,7 @@ define([
 
             var a_regex = /(?:href|HREF)="([^"]+)"/;
             var d_regex = / ([0-9]+-[A-Za-z]+-[0-9]+ [0-9]+:[0-9]+) /;
-            return pre_html[1].split(/\r\n|\r|\n/).forEach(function(line) {
+            return _.map(pre_html[1].split(/\r\n|\r|\n/), function(line) {
                 var filename;
                 var date;
                 console.log('line', line);
@@ -111,7 +118,7 @@ define([
             else if (name.match(/\.(xls|numbers|csv)$/i)) {
                 return 'spreadsheet';
             }
-            else if (name.match(/\.(php|pl|pm|c|cc|rb|java|js|html|xhtml|xml|json|py)$/i)) {
+            else if (name.match(/\.(php|pl|pm|c|cc|rb|java|js|html|xhtml|xml|json|py)(~|\.swp|\.back\|.tmp)?$/i)) {
                 return 'code';
             }
             else if (name.match(/\.(iso|dmg)$/i)) {
@@ -134,21 +141,34 @@ define([
 
                 console.log('parse', url, data);
 
-                if (data.find('table')) {
-                    files = parseTable(data).filter(requireNameAndDate);
+                if ($(data).find('table')) {
+                    files = parseTable(data);
+                    console.log('parseTable results: ',files);
+                    files = files.filter(requireNameAndDate);
+                    //console.log('parseTable results2: ',files);
                 }
-                if (!files && data.find('pre')) {
-                    files = parsePre(data).filter(requireNameAndDate);
+                if (!files.length && $(data).find('pre')) {
+                    files = parsePre(data);
+                    console.log('parsePre results: ',files);
+                    files = files.filter(requireNameAndDate);
+                    //console.log('parsePre results2: ',files);
                 }
+
+
+                //console.log('files: ',files);
 
                 files = _.filter(files, function() {
                     return isSubfile(name, url);
                 });
 
+                //console.log('isSubfile files: ',files);
+
                 files = _.map(files, function(file) {
                     file.type = parseFileType(file.name);
                     return file;
                 });
+
+                //console.log('parseFileType files: ',files);
 
                 return files;
             }
@@ -190,10 +210,10 @@ define([
         tagName: 'li',
         template: _.template($('#file-template').html()),
         initialize: function(options) {
-            console.log('options', options);
             this.listenTo(this.model, 'destroy', this.remove);
         },
         events: {
+            'click .icon': 'open',
             'click img': 'open',
             'click a': 'open'
         },
@@ -236,9 +256,13 @@ define([
         render: function() {
             console.log('rendering...');
 
+            console.log($('.thumbnail').first().width(), this.min_width);
+
             // handle floating left->right->left based on parent width
             var float = ($('.thumbnail').first().width() <= this.min_width ? 'left' : 'right');
             var clear = (float == 'left' ? 'both' : 'none');
+
+            console.log(float, this.float);
 
             if (this.float != float) {
                 $('#thumbnails').find('.date').css('float', float);
@@ -306,6 +330,8 @@ define([
             }
 
             this.min_width = 0;
+            this.float = null;
+            this.clear = null;
             this.$('#thumbnails .thumbnail').remove();
             if (currentDirectory.length) {
                 this.$('#thumbnails').removeClass('hide');
@@ -332,16 +358,14 @@ define([
                 this.$('#empty').removeClass('hide');
             }
 
-
-
             this.render();
         },
         openFile: function(e, file, file2) {
             console.log('JndexView.openFile', e, file, file2);
 
-            if (file.get('is_image')) {
+            if (file.isImg()) {
                 $('#overlay').removeClass('hide');
-                var src = file.get('img');
+                var src = file.get('name');
                 var img = new Image();
                 img.src = src;
 
@@ -355,20 +379,23 @@ define([
                 this.render();
                 $('#lightbox').removeClass('invisible');
             }
-            else {
-                console.log(file.get('filename'));
-                var filename = file.get('filename');
+            else if (file.isDir()) {
+                console.log('dir', file.get('name'));
+                var filename = file.get('name');
                 var url;
 
                 if (filename.match("^\/")) {
                     url = filename;
                 }
                 else {
-                    url = window.location.pathname + file.get('filename');
+                    url = window.location.pathname + file.get('name');
                 }
                 router.navigate(url, {trigger:true});
-
             }
+            else {
+                window.open(file.get('name'), '_blank');
+            }
+
         },
         closeFile: function() {
             console.log('JndexView.closeFile');
