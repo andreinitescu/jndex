@@ -15,9 +15,7 @@
     };
 
     // load css
-    loadCss('VENDOR_URI/bootstrap.css');
-    loadCss('VENDOR_URI/fontello/css/fontello.css', true);
-    loadCss('VENDOR_URI/fontello/css/animation.css');
+    loadCss('EXTERNAL_URI/bootstrap.css');
     loadCss('BASE_URI/jndex.css', true);
 
     // write document body

@@ -1,2 +1,4 @@
 node_modules
 jndex.json
+*.swp
+.DS_Store

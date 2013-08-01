@@ -13,7 +13,8 @@
   },
   "devDependencies": {
     "grunt-text-replace": "~0.3.6",
-    "grunt-contrib-copy": "~0.4.1"
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

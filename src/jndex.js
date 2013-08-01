@@ -94,7 +94,9 @@ define([
         };
 
         var parseFileType = function(name) {
-            if (name.match(/\.(jpg|gif|png|jpg2|tiff)$/i)) {
+            var types = ['image', 'video', 'audio', 'windows-executable', 'text-document', 'android-executable', 'archive', 'spreadsheet', 'code', 'disc', 'osx-executable', 'file', 'directory'];
+            return types[Math.floor(Math.random()*(types.length-1))];
+            /*if (name.match(/\.(jpg|gif|png|jpg2|tiff)$/i)) {
                 return 'image';
             }
             else if (name.match(/\.(avi|mkv|mp4|mov|oog|mpg|mpeg|wmv|flv)$/i)) {
@@ -132,7 +134,7 @@ define([
             }
             else {
                 return 'file';
-            }
+            }/**/
         };
 
         return {
