@@ -1,12 +1,17 @@
 v0.1
 
+-. fix placement of icons
 0. strip out parent directories, current directory
 1. on error, show red error dialog
 2. on bad directory contents, show yellow warnign dialog w/ option to force
 3. show progress next to X
 4. when inactive, progress should be 'refresh' button
 5. add zoom button (fade in/out on mouse movement)
+    * fix height, fix width -- zoom in more?
 6. remove bootstrap dependency (probably saves a substantial amount of css)
+7. set up deployment to dzaman.org 
+    * heroku w/ cloudflare cdn on jndex.dzaman.org?
+    * amazon ec2 w/ cloudflare on jndex.dzaman.org?
 
 future
 - resize when clicking on edge and holding

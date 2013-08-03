@@ -2,6 +2,21 @@ define([
     'jquery', 'underscore', 'backbone', 'jquery.dateFormat'
 ], function($, _, Backbone) { 
 
+    var ICON_DATA = {
+        video:                      'SVG:video.svg',
+        audio:                      'SVG:music.svg',
+        'windows-executable':       'SVG:windows.svg',
+        'text-document':            'SVG:pencil.svg',
+        'android-executable':       'SVG:android.svg',
+        archive:                    'SVG:archive.svg',
+        spreadsheet:                'SVG:barchart.svg',
+        code:                       'SVG:code.svg',
+        disc:                       'SVG:drive.svg',
+        'osx-executable':           'SVG:apple.svg',
+        directory:                  'SVG:folder.svg',
+        file:                       'SVG:doc.svg',
+    };
+
     var File = Backbone.Model.extend({
         initialize: function() {
             // none
@@ -436,6 +451,7 @@ define([
     var router = new Router();
 
     Backbone.history.start({pushState: true});
+
 
     return {
         loadUrl: function(url) {
