@@ -1,6 +1,5 @@
 module.exports = function(grunt) {
     var jndex = grunt.file.readJSON('jndex.json');
-    var base64 = require('./src/base64.js');
 
     var replaceConstants = (function() {
         if (grunt.option('mode') == 'release') { 
@@ -34,7 +33,7 @@ module.exports = function(grunt) {
                 to: function(matched) {
                     var file = matched.substring(4);
                     var contents = grunt.file.read('./resource/'+file);
-                    return 'data:image/svg+xml;charset=utf-8;base64,' + base64.encode(contents);
+                    return 'data:image/svg+xml;charset=utf-8;base64,' + (new Buffer(contents).toString('base64'));
                 }
             }
         ];
@@ -126,7 +125,7 @@ module.exports = function(grunt) {
         //},
 
         jshint: {
-            all: ['Gruntfile.js', 'src/*.js', '!src/base64.js', '!src/bookmarklet.js'],
+            all: ['Gruntfile.js', 'src/*.js', '!src/bookmarklet.js'],
         },
 
         watch: {
