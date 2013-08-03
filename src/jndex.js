@@ -28,14 +28,6 @@ define([
                 date: new Date(0)
             };
         },
-        getImg: function() {
-            if (this.isImg()) {
-                return this.get('name');
-            }
-            else {
-                return ICON_DATA[this.get('type')];
-            }
-        },
         isImg: function() {
             return this.get('type') == 'image';
         },
@@ -244,13 +236,7 @@ define([
             $(this.el).trigger('openfile', this.model); 
         },
         render: function() {
-            var model = {
-                name: this.model.get('name'),
-                date: $.format.date(this.model.get('name'), "MM/dd/yy hh:MM a"),
-                image: this.model.getImg(),
-                type: this.model.get('type')
-            };
-            $(this.el).addClass('span2 thumbnail').html(this.compiled(model));
+            $(this.el).addClass('span2 thumbnail').html(this.compiled({file: this.model.toJSON(), ICON_DATA: ICON_DATA}));
             return this;
         },
         clear: function() {

@@ -69,9 +69,13 @@
     f.id = 'file-template';
     f.type = 'text/template';
     f.innerHTML = 
-    '<img src="<%= image %>" class="<% if (type == "image") { print("icon"); } %>">' + 
-    '<span class="title"><a href="<%= name %>"><%= name %></a></span>' + 
-    '<span class="date"><% date %></span>'; 
+    '<% if (file.type == "image") { %>' +
+        '<img src="<%= file.name %>"' + 
+    '<% } else { %>' + 
+        '<img src="<%= ICON_DATA[file.type] %>" class="icon">' + 
+    '<% } %>' + 
+    '<span class="title"><a href="<%= file %>"><%= file.name%></a></span>' + 
+    '<span class="date"><% print($.format.date(file.date, "MM/dd/yy hh:MM a")); %></span>'; 
     document.body.appendChild(f);
 
     var b = document.createElement('script');
