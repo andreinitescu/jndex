@@ -19,14 +19,24 @@ define([
 
     var File = Backbone.Model.extend({
         initialize: function() {
-            // none
+            this.set('image', this.getImg());
         },
         defaults: function() {
             return {
                 name: '--',
                 type: '--',
+                image: '--',
                 date: new Date(0)
             };
+        },
+        getImg: function() {
+            console.log('getting image..');
+            if (this.isImg()) {
+                return this.get('name');
+            }
+            else {
+                return ICON_DATA[this.get('type')];
+            }
         },
         isImg: function() {
             return this.get('type') == 'image';
@@ -109,9 +119,9 @@ define([
         };
 
         var parseFileType = function(name) {
-            var types = ['image', 'video', 'audio', 'windows-executable', 'text-document', 'android-executable', 'archive', 'spreadsheet', 'code', 'disc', 'osx-executable', 'file', 'directory'];
-            return types[Math.floor(Math.random()*(types.length-1))];
-            /*if (name.match(/\.(jpg|gif|png|jpg2|tiff)$/i)) {
+            //var types = ['image', 'video', 'audio', 'windows-executable', 'text-document', 'android-executable', 'archive', 'spreadsheet', 'code', 'disc', 'osx-executable', 'file', 'directory'];
+            //return types[Math.floor(Math.random()*(types.length-1))];
+            if (name.match(/\.(jpg|gif|png|jpg2|tiff)$/i)) {
                 return 'image';
             }
             else if (name.match(/\.(avi|mkv|mp4|mov|oog|mpg|mpeg|wmv|flv)$/i)) {
@@ -149,7 +159,7 @@ define([
             }
             else {
                 return 'file';
-            }/**/
+            }
         };
 
         return {
@@ -223,7 +233,7 @@ define([
 
     var FileView = Backbone.View.extend({
         tagName: 'li',
-        template: _.template($('#file-template').html()),
+        compiled: _.template($('#file-template').html()),
         initialize: function(options) {
             this.listenTo(this.model, 'destroy', this.remove);
         },
@@ -237,7 +247,7 @@ define([
             $(this.el).trigger('openfile', this.model); 
         },
         render: function() {
-            $(this.el).addClass('span2 thumbnail').html(this.template(this.model.toJSON()));
+            $(this.el).addClass('span2 thumbnail').html(this.compiled({model: this.model}));
             return this;
         },
         clear: function() {

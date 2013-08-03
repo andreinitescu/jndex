@@ -1,6 +1,7 @@
 v0.1
 
--. fix placement of icons
+-. call methods on model passed to template? 
+
 0. strip out parent directories, current directory
 1. on error, show red error dialog
 2. on bad directory contents, show yellow warnign dialog w/ option to force
@@ -15,3 +16,10 @@ v0.1
 
 future
 - resize when clicking on edge and holding
+
+questions
+    - can icons be furhter optimized?
+        - only load each icon once and just append it to the dom multiple times?
+        - use background images defined once in css?
+    - do I need to include the doctype?
+        - <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"> 
