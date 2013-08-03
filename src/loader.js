@@ -69,13 +69,9 @@
     f.id = 'file-template';
     f.type = 'text/template';
     f.innerHTML = 
-    '<% if (model.get("type") == "image") { %>' + 
-    '<img src="<%= model.getImg() %>">' + 
-    '<% } else { %>' + 
-    '<img src="<%= model.getImg() %>" style="padding: 10px; box-sizing: border-box">' + 
-    '<% } %>' + 
-    '<span class="title"><a href="<%= model.get("name") %>"><%= model.get("name") %></a></span>' + 
-    '<span class="date"><% print($.format.date(model.get("date"), "MM/dd/yy hh:MM a")); %></span>'; 
+    '<img src="<%= image %>" class="<% if (type == "image") { print("icon"); } %>">' + 
+    '<span class="title"><a href="<%= name %>"><%= name %></a></span>' + 
+    '<span class="date"><% date %></span>'; 
     document.body.appendChild(f);
 
     var b = document.createElement('script');

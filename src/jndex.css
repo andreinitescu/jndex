@@ -100,15 +100,9 @@ body {
 }
 
 .icon {
-    font-size: 100px;
-    /*line-height: 165px;*/
-    width: 165px;
-    height: 101px;
-    padding-top: 32px;
-    padding-bottom: 32px;
-    text-align: center;
-    float: left;
-    cursor: pointer;
+    padding: 10px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 #error {

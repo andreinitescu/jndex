@@ -19,18 +19,16 @@ define([
 
     var File = Backbone.Model.extend({
         initialize: function() {
-            this.set('image', this.getImg());
+            // no-op 
         },
         defaults: function() {
             return {
                 name: '--',
                 type: '--',
-                image: '--',
                 date: new Date(0)
             };
         },
         getImg: function() {
-            console.log('getting image..');
             if (this.isImg()) {
                 return this.get('name');
             }
@@ -238,7 +236,6 @@ define([
             this.listenTo(this.model, 'destroy', this.remove);
         },
         events: {
-            'click .icon': 'open',
             'click img': 'open',
             'click a': 'open'
         },
@@ -247,7 +244,13 @@ define([
             $(this.el).trigger('openfile', this.model); 
         },
         render: function() {
-            $(this.el).addClass('span2 thumbnail').html(this.compiled({model: this.model}));
+            var model = {
+                name: this.model.get('name'),
+                date: $.format.date(this.model.get('name'), "MM/dd/yy hh:MM a"),
+                image: this.model.getImg(),
+                type: this.model.get('type')
+            };
+            $(this.el).addClass('span2 thumbnail').html(this.compiled(model));
             return this;
         },
         clear: function() {
@@ -396,6 +399,7 @@ define([
         },
         openFile: function(e, file, file2) {
             console.log('JndexView.openFile', e, file, file2);
+            e.stopPropagation();
 
             if (file.isImg()) {
                 $('#overlay').removeClass('hide');
