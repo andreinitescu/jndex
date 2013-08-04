@@ -44,25 +44,26 @@
     d.innerHTML = 
     '<div id="header">' + 
     '<a class="title" href="https://github.com/dzaman/jndex">jndex</a>' + 
-    '<a class="closebtn" href="javascript:(window.location=window.location)">&#x2715;</a></div>' + 
-    '<ul id="breadcrumb" class="breadcrumb">' + 
-    '</ul>' + 
+    '<a class="closebtn" href="javascript:(window.location=window.location)">&#x2715;</a>' +
+    '<a class="refreshbtn" href="#"><img id="progress" src="SVG:spin.svg" width="15px"></a>' + 
+    '</div>' + 
+    '<ul id="breadcrumb" class="breadcrumb"></ul>' + 
     '<div id="content">' + 
         '<div class="row-fluid">' + 
             '<ul id="thumbnails" class="thumbnails"></ul>' + 
-            // this should use alert markup
-            '<div id="empty" class="hide">Empty directory / not an index</div>' + 
-            '<div id="error" class="hide">' + 
-            '<div class="alert alert-block">' + 
-                '<button type="button" class="close" data-dismiss="alert">&times;</button>' + 
-                '<h4>Warning!</h4>' + 
-                '<p>...</p>' + 
-            '</div>' + 
+        '</div>' + 
+        // this should use alert markup
+        '<div id="empty" class="hide">Empty directory / not an index</div>' + 
+        '<div id="error" class="hide">' +
+            '<div class="alert alert-block alert-error">' + 
+                '<a href="#" class="close">&times;</a>' + 
+                '<h4>Error</h4>' + 
+                '<p id="error_message"></p>' + 
             '</div>' + 
         '</div>' + 
+    '</div>' + 
     '<div id="overlay" class="hide"></div>' + 
-    '<div id="lightbox" class="invisible"></div>' +
-    '</div>';
+    '<div id="lightbox" class="invisible"></div>';
     document.body.appendChild(d);
 
     var f = document.createElement('script');
@@ -74,8 +75,8 @@
     '<% } else { %>' + 
         '<img src="<%= ICON_DATA[file.type] %>" class="icon">' + 
     '<% } %>' + 
-    '<span class="title"><a href="<%= file %>"><%= file.name%></a></span>' + 
-    '<span class="date"><% print($.format.date(file.date, "MM/dd/yy hh:MM a")); %></span>'; 
+    '<p><span class="title"><a href="<%= file %>"><%= file.name%></a></span>' + 
+    '<span class="date"><% print($.format.date(file.date, "MM/dd/yy hh:MM a")); %></span></p>'; 
     document.body.appendChild(f);
 
     var b = document.createElement('script');

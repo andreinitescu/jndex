@@ -37,14 +37,7 @@ define([
     });
 
     var DirectoryResponseHandler = function() {
-
-        var translateFilePath = function(href) {
-            return href;
-        };
-
-        var isSubfile = function(filename) {
-            return true;
-        };
+        var url = null;
 
         var parseTable = function(data) {
             console.log('parsing table');
@@ -57,7 +50,7 @@ define([
                     if (a) {
                         var href = a.attr('href');
                         if (href) {
-                            name = translateFilePath(href);
+                            name = href;
                         }
                     }
                     var text = $(this).html();
@@ -108,6 +101,30 @@ define([
             return data.name && data.date;
         };
 
+        var getAbsolutePath = function(name, url) {
+            console.log('getAbsolutePath', name, url);
+            // url and absolute path 
+            if (name.match(/:\/\//)) {
+                return name.match(/[A-Za-z0-9]+:\/\/(?:[^\/]+|:[0-9]+)+(\/.+)/)[1];
+            }
+            // absolute path
+            else if (name[0] == '/') {
+                return name;
+            }
+            // relative path
+            else {
+                if (name.substring(0, 2) == './') {
+                    name = name.substring(2);
+                }
+                return url + name;
+            }
+            return null;
+        };
+
+        var isSubfile = function(path, url) {
+            return path.length > url.length && path.substring(0, url.length) == url;
+        };
+
         var parseFileType = function(name) {
             //var types = ['image', 'video', 'audio', 'windows-executable', 'text-document', 'android-executable', 'archive', 'spreadsheet', 'code', 'disc', 'osx-executable', 'file', 'directory'];
             //return types[Math.floor(Math.random()*(types.length-1))];
@@ -153,39 +170,32 @@ define([
         };
 
         return {
-            parse: function(data, url) {
+            parse: function(url, data) {
                 var files = [];
-
-                console.log('parse', url, data);
 
                 if ($(data).find('table')) {
                     files = parseTable(data);
-                    console.log('parseTable results: ',files);
                     files = files.filter(requireNameAndDate);
-                    //console.log('parseTable results2: ',files);
                 }
                 if (!files.length && $(data).find('pre')) {
                     files = parsePre(data);
-                    console.log('parsePre results: ',files);
                     files = files.filter(requireNameAndDate);
-                    //console.log('parsePre results2: ',files);
                 }
 
-
-                //console.log('files: ',files);
-
-                files = _.filter(files, function() {
-                    return isSubfile(name, url);
+                files = _.map(files, function(file) {
+                    file.path = getAbsolutePath(file.name, url);
+                    file.name = file.path.substring(url.length);
+                    return file;
                 });
 
-                //console.log('isSubfile files: ',files);
+                files = _.filter(files, function(file) {
+                    return isSubfile(file.path, url);
+                });
 
                 files = _.map(files, function(file) {
                     file.type = parseFileType(file.name);
                     return file;
                 });
-
-                //console.log('parseFileType files: ',files);
 
                 return files;
             }
@@ -207,16 +217,24 @@ define([
                 url: url
             });
 
+            $('#progress').addClass('animate-spin');
+
             request.done(function(data) {
-                var models = directoryResponseHandler.parse(data, url);
+                var models = directoryResponseHandler.parse(url, data);
                 if (models) {
                     collection.reset(models);               
                 }
-                setTimeout(function() { console.log('triggering error'); collection.trigger('error', {status: 500, statusText: 'internal server error'}); }, 500);
             });
 
             request.fail(function(xhr) {
+                console.log(xhr);
                 collection.trigger('error', {status: xhr.status, statusText: xhr.statusText});
+            });
+            
+            request.complete(function() {
+                setTimeout(function() {
+                    $('#progress').removeClass('animate-spin');
+                }, 1000);
             });
         }
     });
@@ -255,7 +273,8 @@ define([
             'click #breadcrumb a': 'navigate',
             'openfile': 'openFile', 
             'click #overlay': 'closeFile',
-            'click #lightbox': 'closeFile'
+            'click #lightbox': 'closeFile',
+            'click #error .close': 'hideError'
         },
         initialize: function() {
             console.log('JndexView.initialize');
@@ -324,11 +343,16 @@ define([
                 $('#lightbox').css('top', window.scrollY + (window.innerHeight-height)/2);
             }
         },
+        hideError: function(e) {
+            var delay = (e ? 300 : 1000);
+            $('#error').fadeOut(delay);
+        },
         handleError: function(error) {
+            clearTimeout(this.errorTimeout);
+            $('#error_message').text(error.status + ': ' + error.statusText);
+            var context = this;
             $('#error').fadeIn(300, function() {
-                setTimeout(function() {
-                    $('#error').fadeOut(1000);
-                }, 2000);
+                context.errorTimeout = setTimeout(context.hideError, 2000);
             });
         },
         resetDirectory: function() {

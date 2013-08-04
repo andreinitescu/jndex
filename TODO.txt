@@ -1,15 +1,10 @@
 v0.1
 
--. call methods on model passed to template? 
-
-0. strip out parent directories, current directory
-1. on error, show red error dialog
-2. on bad directory contents, show yellow warnign dialog w/ option to force
 3. show progress next to X
 4. when inactive, progress should be 'refresh' button
 5. add zoom button (fade in/out on mouse movement)
     * fix height, fix width -- zoom in more?
-6. remove bootstrap dependency (probably saves a substantial amount of css)
+6. remove bootstrap dependency (probably saves a substantial amount of css) or customize bootstrap and vendor it
 7. set up deployment to dzaman.org 
     * heroku w/ cloudflare cdn on jndex.dzaman.org?
     * amazon ec2 w/ cloudflare on jndex.dzaman.org?
@@ -23,3 +18,6 @@ questions
         - use background images defined once in css?
     - do I need to include the doctype?
         - <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"> 
+    - what is a good place to write rendering logic? not sure how much belongs in the template and how much belongs in the view
+    - does navigation make sense? look into error case
+
