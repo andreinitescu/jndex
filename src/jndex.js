@@ -1,6 +1,6 @@
 define([
-    'jquery', 'underscore', 'backbone', 'jquery.dateFormat'
-], function($, _, Backbone) { 
+    'jquery', 'underscore', 'backbone', 'jquery.dateFormat', '_vendor'
+], function($, _, Backbone, exports) { 
 
     var ICON_DATA = {
         video:                      'SVG:video.svg',
@@ -376,6 +376,9 @@ define([
                 }
             }
 
+            $('#slide').slider();
+            $('#scale').removeClass('hidden');
+
             this.min_width = 0;
             this.float = null;
             this.clear = null;
@@ -476,12 +479,25 @@ define([
 
     Backbone.history.start({pushState: true});
 
+    // set JNDEX in the global namespace so that it can be referenced by the bookmarklet to refresh the page
+    window.JNDEX = {
+        loadUrl: function(options) {
+            options = options || {};
+            if (!options.url) {
+                url = options.url = window.location.pathname || '';
+            }
+            if (options.refresh) { 
+                url += (url.match(/\?/) ? '&' : '?');
+                url += (new Date()).getTime();
+            }
+            router.navigate(url, {trigger:true, replace:options.refresh});
 
-    return {
-        loadUrl: function(url) {
-            console.log('url', url);
-            router.navigate(url, {trigger:true});
+            if (options.refresh) {
+                router.navigate(options.url, {trigger:false, replace:true});
+            }
         }
     };
+
+    return JNDEX;
 });
 

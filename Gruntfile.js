@@ -2,14 +2,23 @@ module.exports = function(grunt) {
     var jndex = grunt.file.readJSON('jndex.json');
 
     var replaceConstants = (function() {
+        // only bust cache if we're not in release mode
+        var bust_cache;
+
         if (grunt.option('mode') == 'release') { 
             config = jndex.release;
+            bust_cache = '';
         }
         else {
             config = jndex.build;
+            bust_cache = '$1' + (new Date()).getTime();
         }
 
         return [
+            {
+                from: /(\?)?BUST_CACHE/g,
+                to: bust_cache
+            },
             {
                 from: 'BASE_URI',
                 to: config.base_uri
@@ -19,9 +28,6 @@ module.exports = function(grunt) {
             },{
                 from: 'EXTERNAL_URI',
                 to: config.external_uri
-            },{
-                from: 'RESOURCE_URI',
-                to: config.resource_uri
             }, {
                 from: /MODULE_PATH:([A-Za-z0-9_\-.]+)/g,
                 to: function(matched) { 
@@ -64,13 +70,13 @@ module.exports = function(grunt) {
 
         replace: {
             js: {
-                src: ['src/*.js', '!src/base64.js'],
+                src: ['src/*.js'],
                 dest: ['build/'],
                 replacements: replaceConstants 
             }, 
             css: {
-                src: ['build/*.css'],
-                overwrite: true,
+                src: ['src/*.css'],
+                dest: ['build/'],
                 replacements: replaceConstants 
             }
 
@@ -105,11 +111,15 @@ module.exports = function(grunt) {
 
         concat: {
             options: {
-                separator: "\n",
+                separator: "\n"
             },
-            dist: {
-                src: ['src/*.css'],
+            css: {
+                src: ['build/*.css', 'vendor/*.css'],
                 dest: 'build/jndex.css'
+            },
+            js: {
+                src: ['vendor/*.js'],
+                dest: 'build/vendor.js'
             }
         },
 
@@ -125,20 +135,20 @@ module.exports = function(grunt) {
         //},
 
         jshint: {
-            all: ['Gruntfile.js', 'src/*.js', '!src/bookmarklet.js'],
+            all: ['Gruntfile.js', 'src/*.js', '!src/bookmarklet.js', '!src/bootstrap-slider.js'],
         },
 
         watch: {
             js: {
                 files: ['src/*.js', 'Gruntfile.js', 'jndex.json'],
-                tasks: ['jshint', 'replace:js'],
+                tasks: ['jshint', 'replace:js', 'concat:js'],
                 options: {
                     interrupt: true
                 }
             },
             css: {
                 files: ['src/*.css', 'Gruntfile.js', 'jndex.json'],
-                tasks: ['concat', 'replace:css'],
+                tasks: ['replace:css', 'concat:css'],
                 options: {
                     interrupt: true
                 }
@@ -157,6 +167,6 @@ module.exports = function(grunt) {
 
     // Default task(s).
     grunt.registerTask('release', ['build', 'uglify', 'cssmin']);
-    grunt.registerTask('build', ['jshint', 'concat', 'replace']);
+    grunt.registerTask('build', ['jshint', 'replace', 'concat']);
     grunt.registerTask('default', ['build', 'watch']);
 };

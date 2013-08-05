@@ -1,16 +1,19 @@
 v0.1
 
-3. show progress next to X
-4. when inactive, progress should be 'refresh' button
-5. add zoom button (fade in/out on mouse movement)
+1. adjustable preview size
+2. add zoom button (fade in/out on mouse movement)
     * fix height, fix width -- zoom in more?
-6. remove bootstrap dependency (probably saves a substantial amount of css) or customize bootstrap and vendor it
-7. set up deployment to dzaman.org 
-    * heroku w/ cloudflare cdn on jndex.dzaman.org?
-    * amazon ec2 w/ cloudflare on jndex.dzaman.org?
+3. remove bootstrap dependency (probably saves a substantial amount of css) or customize bootstrap and vendor it
+4. publish to github.io
 
 future
+- svg, .json, and Gruntfile.js changes should kick off rebuild
+- use cookies to store preview size
 - resize when clicking on edge and holding
+- set up deployment to dzaman.org 
+    * heroku, ec2?
+    * cloudflare?
+    * jndex.dzaman.org?
 
 questions
     - can icons be furhter optimized?

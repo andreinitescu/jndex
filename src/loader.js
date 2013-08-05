@@ -1,14 +1,7 @@
 (function() {
-    bustCache = function(string, doit) {
-        if (doit) {
-            string += '?' + (new Date()).getTime();
-        }
-        return string;
-    };
-
-    loadCss = function(src, bustcache) {
+    loadCss = function(src) {
         var css = document.createElement('link');
-        css.href = bustCache(src, bustcache);
+        css.href = src;
         css.rel = 'stylesheet';
         css.media = 'screen';
         document.head.appendChild(css);
@@ -16,7 +9,7 @@
 
     // load css
     loadCss('EXTERNAL_URI/bootstrap.css');
-    loadCss('BASE_URI/jndex.css', true);
+    loadCss('BASE_URI/jndex.css?BUST_CACHE');
 
     // write document body
     // -- this isn't allowed for some reason. chrome says it's unsafe.
@@ -44,10 +37,17 @@
     d.innerHTML = 
     '<div id="header">' + 
     '<a class="title" href="https://github.com/dzaman/jndex">jndex</a>' + 
-    '<a class="closebtn" href="javascript:(window.location=window.location)">&#x2715;</a>' +
-    '<a class="refreshbtn" href="#"><img id="progress" src="SVG:spin.svg" width="15px"></a>' + 
+    '<a class="closebtn" href="javascript:window.location.reload()">&#x2715;</a>' +
+    //'<a class="refreshbtn" href="#"><img id="progress" src="SVG:spin.svg" width="15px"></a>' + 
     '</div>' + 
-    '<ul id="breadcrumb" class="breadcrumb"></ul>' + 
+    '<div id="subheader" class="clearfix">' + 
+        '<ul id="breadcrumb" class="breadcrumb"></ul>' + 
+        '<div id="scale" class="hidden">' +
+            '<img src="SVG:small.svg" width="12px">' +
+            '<input id="slide" type="text" class="span2" value="" data-slider-min="4" data-slider-max="8" data-slider-step="1" data-slider-value="6" data-slider-selection="before" data-slider-tooltip="hide">' +
+            '<img src="SVG:large.svg" width="12px">' + 
+        '</div>' + 
+    '</div>' + 
     '<div id="content">' + 
         '<div class="row-fluid">' + 
             '<ul id="thumbnails" class="thumbnails"></ul>' + 
@@ -95,9 +95,9 @@
     }
 
     var script = document.createElement('script');
-    script.src = 'REQUIREJS_URI/MODULE_PATH:requirejs';
+    script.src = 'REQUIREJS_URI/MODULE_PATH:requirejs?BUST_CACHE';
     script.type = 'text/javascript';
-    script.setAttribute('data-main', bustCache('BASE_URI/main.js', true));
+    script.setAttribute('data-main', 'BASE_URI/main.js?BUST_CACHE');
     document.head.appendChild(script);
 
     // insert JLOAD config (# of items per row)
