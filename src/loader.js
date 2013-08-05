@@ -44,7 +44,7 @@
         '<ul id="breadcrumb" class="breadcrumb"></ul>' + 
         '<div id="scale" class="hidden">' +
             '<img src="SVG:small.svg" width="12px">' +
-            '<input id="slide" type="text" class="span2" value="" data-slider-min="4" data-slider-max="8" data-slider-step="1" data-slider-value="6" data-slider-selection="before" data-slider-tooltip="hide">' +
+            '<input id="slide" type="text" class="span2" value="" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="1" data-slider-selection="before" data-slider-tooltip="hide">' +
             '<img src="SVG:large.svg" width="12px">' + 
         '</div>' + 
     '</div>' + 

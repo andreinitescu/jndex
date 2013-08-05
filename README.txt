@@ -1,6 +1,6 @@
 v0.1
 
-1. adjustable preview size
+-. slidechange event --> recontribute
 2. add zoom button (fade in/out on mouse movement)
     * fix height, fix width -- zoom in more?
 3. remove bootstrap dependency (probably saves a substantial amount of css) or customize bootstrap and vendor it

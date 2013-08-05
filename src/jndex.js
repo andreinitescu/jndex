@@ -239,6 +239,8 @@ define([
         }
     });
 
+    var thumbnail_class = 'span2';
+
     var FileView = Backbone.View.extend({
         tagName: 'li',
         compiled: _.template($('#file-template').html()),
@@ -254,7 +256,7 @@ define([
             $(this.el).trigger('openfile', this.model); 
         },
         render: function() {
-            $(this.el).addClass('span2 thumbnail').html(this.compiled({file: this.model.toJSON(), ICON_DATA: ICON_DATA}));
+            $(this.el).addClass(thumbnail_class + ' thumbnail').html(this.compiled({file: this.model.toJSON(), ICON_DATA: ICON_DATA}));
             return this;
         },
         clear: function() {
@@ -268,13 +270,20 @@ define([
         clear: null,
         currentFile: null,
         min_width: 0,
+        class_map: ['span1', 'span2', 'span3', 'span4', 'span6'],
         el: $('#jndex'),
         events: {
             'click #breadcrumb a': 'navigate',
             'openfile': 'openFile', 
             'click #overlay': 'closeFile',
             'click #lightbox': 'closeFile',
-            'click #error .close': 'hideError'
+            'click #error .close': 'hideError',
+            'slideChange #scale': 'resizeIcons'
+        },
+        resizeIcons: function(event) {
+            console.log(thumbnail_class, event.new);
+            $('#thumbnails .' + thumbnail_class).addClass(this.class_map[event.new]).removeClass(thumbnail_class);
+            thumbnail_class = this.class_map[event.new];
         },
         initialize: function() {
             console.log('JndexView.initialize');
