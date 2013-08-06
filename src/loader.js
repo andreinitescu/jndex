@@ -63,7 +63,13 @@
         '</div>' + 
     '</div>' + 
     '<div id="overlay" class="hide"></div>' + 
-    '<div id="lightbox" class="invisible"></div>';
+    '<div id="lightbox" class="invisible">' + 
+        '<span id="open_file"></span>' + 
+        '<div id="controls">' + 
+            '<img src="SVG:zoom-in.svg">' + 
+            '<img src="SVG:zoom-out.svg">' + 
+        '</div>' + 
+    '</div>';
     document.body.appendChild(d);
 
     var f = document.createElement('script');

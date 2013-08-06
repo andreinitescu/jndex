@@ -1,5 +1,21 @@
 v0.1
 
+img
+padding: 5px;
+box-sizing: border-box;
+background-color: #FFFFFF;
+
+div
+display: inline-block;
+vertical-align: top;
+
+img
+display: block;
+margin-top: 5px;
+margin-left: 5px;
+
+-. navigation should result in image going away/reappearing
+
 -. slidechange event --> recontribute
 2. add zoom button (fade in/out on mouse movement)
     * fix height, fix width -- zoom in more?

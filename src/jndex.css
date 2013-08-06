@@ -88,8 +88,6 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    background-color: #FFF;
-    padding: 5px;
     cursor: pointer;
 }
 
@@ -154,6 +152,25 @@ body {
 
 .clearfix:after {
     clear: both;
+}
+
+#open_file img {
+    padding: 5px;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+}
+
+#controls {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+}
+
+#controls img {
+    display: block;
+    width: 35px;
+    left: -40px;
+    position: relative;
 }
 
 /*

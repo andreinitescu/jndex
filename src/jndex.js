@@ -1,5 +1,6 @@
+/* jshint debug:true */
 define([
-    'jquery', 'underscore', 'backbone', 'jquery.dateFormat', '_vendor'
+    'jquery', 'underscore', 'backbone', 'jquery-dateFormat', 'jquery-cookie', '_vendor'
 ], function($, _, Backbone, exports) { 
 
     var ICON_DATA = {
@@ -270,6 +271,7 @@ define([
         clear: null,
         currentFile: null,
         min_width: 0,
+        controlsTimeout: null,
         class_map: ['span1', 'span2', 'span3', 'span4', 'span6'],
         el: $('#jndex'),
         events: {
@@ -278,7 +280,43 @@ define([
             'click #overlay': 'closeFile',
             'click #lightbox': 'closeFile',
             'click #error .close': 'hideError',
-            'slideChange #scale': 'resizeIcons'
+            'slideChange #scale': 'resizeIcons',
+            'mousemove': 'updateControls'
+        },
+        resetControlsTimeout: function() {
+            console.log('adding controls timeout', this.controlsTimeout);
+            var context = this;
+            clearTimeout(this.controlsTimeout);
+            this.controlsTimeout = setTimeout(function() {
+                clearTimeout(context.controlsTimeout);
+                $('#controls').fadeOut(2000);
+                context.controlsTimeout = null;
+                console.log('cleared timeout');
+            }, 2000);
+            console.log('controls timeout = ', this.controlsTimeout);
+        },
+        nextMoveTime: 0,
+        updateControls: function() {
+            var time = (new Date()).getTime();
+            if (time < this.nextMoveTime) {
+                return;
+            }
+            this.nextMoveTime= time + 250;
+
+            if (this.currentFile) {
+                console.log('file open');
+                if (this.controlsTimeout) {
+                    console.log('timeout active');
+                    this.resetControlsTimeout();
+                }
+                else {
+                    console.log('no timeout');
+                    this.resetControlsTimeout();
+                    $('#controls').stop(true);
+                    $('#controls').fadeTo(250,1);
+                }
+            }
+            // maybe update controls here if it's not a mouse event 
         },
         resizeIcons: function(event) {
             console.log(thumbnail_class, event.new);
@@ -343,8 +381,8 @@ define([
                     }
                 }
 
-                $('#lightbox').find('img').height(height-padding_height); 
-                $('#lightbox').find('img').width(width-padding_width);
+                $('#open_file').find('img').height(height-padding_height); 
+                $('#open_file').find('img').width(width-padding_width);
 
                 //$('#lightbox').css('left', ($(window).width()-width)/2);
                 //$('#lightbox').css('top', ($(window).height()-height)/2);
@@ -435,8 +473,9 @@ define([
                     w: img.width
                 };
 
-                $('#lightbox').append(img);
+                $('#open_file').append(img);
                 this.render();
+                this.updateControls();
                 $('#lightbox').removeClass('invisible');
             }
             else if (file.isDir()) {
@@ -462,7 +501,7 @@ define([
             this.currentFile = null;
             $('#lightbox').addClass('invisible');
             $('#overlay').addClass('hide');
-            $('#lightbox').find('img').remove();
+            $('#open_file').find('img').remove();
         },
         navigate: function(event, element) {
             event.preventDefault();
